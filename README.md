@@ -12,5 +12,4 @@ The SE-Notenverwaltung is a project that is developed for the coursework in the 
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)
 
 ## Autor
-Julian Maximilian Tomsa </br>
-Github: [@TomsaJ](https://www.github.com/TomsaJ)
+[@TomsaJ](https://www.github.com/TomsaJ)
