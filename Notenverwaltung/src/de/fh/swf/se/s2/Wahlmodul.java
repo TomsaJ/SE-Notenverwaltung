@@ -34,7 +34,7 @@ public class Wahlmodul {
 	 */
 	public boolean addWNote(double wNote) {
 		this.wNote = wNote;
-		return true; // oder einen anderen booleschen Wert je nach Bedarf
+		return true;
 	}
 
 

@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Erstellen eines Studenten
-        Student student = new Student("Max", "Mustermann", "Informatik");
+        Student student = new Student("Max", "Mustermann",342456, "Informatik");
 
         // Hinzufügen von Pflichtmodulen
         Pflichtmodul pm1 = new Pflichtmodul("Mathematik", 5, "Beschreibung1", 1);
@@ -13,8 +13,8 @@ public class Main {
         student.addPflichtmodul(pm2);
 
         pm1.addPNote(5.0); // Erster Versuch
-        pm1.addPNote(1.2); // Zweiter Versuch
-        pm2.addPNote(2.3);
+        pm1.addPNote(1.3); // Zweiter Versuch
+        pm2.addPNote(3.3);
 
         // Hinzufügen von Wahlpflichtmodulen
         Wahlmodul wm1 = new Wahlmodul("Webentwicklung", 5, "Beschreibung3", 3);
@@ -32,6 +32,7 @@ public class Main {
 
         // Ausgabe der Informationen
         System.out.println("Student: " + student.getVorname() + " " + student.getNachname());
+        System.out.println("Matrikelnummer: " + student.getMatrikelnummer());
         System.out.println("Studiengang: " + student.getStudiengang());
 
         // Ausgabe der Pflichtmodule und Noten
@@ -44,7 +45,7 @@ public class Main {
         System.out.println("Durchschnittsnote der Pflichtmodule: " + student.berechnePflichtmodulDurchschnitt());
 
         // Ausgabe der Wahlpflichtmodule und Noten
-        System.out.println("Wahlpflichtmodule und Noten:");
+        System.out.println("Wahlmodule und Noten:");
         student.getWahlmodule().forEach(modul -> {
             System.out.println(" - " + modul.getModulName() + " Note: " + modul.getNote());
         });

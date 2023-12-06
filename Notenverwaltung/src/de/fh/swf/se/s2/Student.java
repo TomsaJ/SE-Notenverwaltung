@@ -15,9 +15,10 @@ public class Student {
 	private Abschluss abschluss;
 
 	// Konstruktor für Student
-	public Student(String vorname, String nachname, String studiengang) {
+	public Student(String vorname, String nachname, long matrikelnummer , String studiengang) {
 		this.vorname = vorname;
 		this.nachname = nachname;
+		this.matrikelnummer = matrikelnummer;
 		this.studiengang = studiengang;
 		this.pflichtmodule = new ArrayList<>();
 		this.wahlmodule = new ArrayList<>();
@@ -82,18 +83,36 @@ public class Student {
 	 * @param
 	 */
 	public double berechnePflichtmodulDurchschnitt() {
-		// TODO - implement Student.berechnePflichtmodulDurchschnitt
-		return 0;
+		if (pflichtmodule.isEmpty()) {
+			return 0; // Keine Pflichtmodule vorhanden
+		}
+
+		double sum = 0.0;
+		for (Pflichtmodul pflichtmodul : pflichtmodule) {
+			sum += pflichtmodul.getPNote();
+		}
+
+		return sum / pflichtmodule.size();
 	}
+
 
 	/**
 	 * 
 	 * @param
 	 */
 	public double berechneWahlModulDurchschnitt() {
-		// TODO - implement Student.berechneWahlModulDurchschnitt
-		return 0;
+		if (wahlmodule.isEmpty()) {
+			return 0; // Keine Wahlmodule vorhanden
+		}
+
+		double sum = 0.0;
+		for (Wahlmodul wahlmodul : wahlmodule) {
+			sum += wahlmodul.getNote();
+		}
+
+		return sum / wahlmodule.size();
 	}
+
 
 	/**
 	 * 
