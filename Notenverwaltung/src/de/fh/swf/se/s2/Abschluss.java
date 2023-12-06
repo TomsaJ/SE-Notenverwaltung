@@ -8,7 +8,11 @@ public class Abschluss {
 	private double aGewichtungArbeit;
 	private double aGewichtungKolloquium;
 
-
+	public Abschluss(String thema, double aGewichtung, double kGewichtung) {
+		this.aGewichtungArbeit = aGewichtung;
+		this.aGewichtungKolloquium = kGewichtung;
+		this.aThema = thema;
+	}
 
 	/**
 	 * 
@@ -16,7 +20,7 @@ public class Abschluss {
 	 */
 	public void abschluss(String thema) {
 		// TODO - implement Abschluss.abschluss
-		//throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -27,7 +31,7 @@ public class Abschluss {
 	 */
 	public void abschluss(String thema, double gewichtungArbeit, double gewichtungKolloquium) {
 		// TODO - implement Abschluss.abschluss
-		//throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -35,13 +39,8 @@ public class Abschluss {
 	 * @param noteArbeit
 	 */
 	public boolean addNoteArbeit(double noteArbeit) {
-		if (noteArbeit >= 1.0 && noteArbeit <= 5.0) {
-			this.aNoteArbeit = noteArbeit;
-			return true;
-		} else {
-			System.out.println("Ungültige Note. Die Note muss zwischen 1.0 und 5.0 liegen.");
-			return false;
-		}
+		// TODO - implement Abschluss.addNoteArbeit
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -49,13 +48,11 @@ public class Abschluss {
 	 * @param noteKolloquium
 	 */
 	public boolean addNoteKolloquium(double noteKolloquium) {
-		if (noteKolloquium >= 1.0 && noteKolloquium <= 5.0) {
-			this.aNoteKolloquium = noteKolloquium;
-			return true;
-		} else {
-			System.out.println("Ungültige Note. Die Note muss zwischen 1.0 und 5.0 liegen.");
-			return false;
-		}
+		// TODO - implement Abschluss.addNoteKolloquium
+		throw new UnsupportedOperationException();
 	}
 
+	public String getThema() {
+		return aThema;
+	}
 }

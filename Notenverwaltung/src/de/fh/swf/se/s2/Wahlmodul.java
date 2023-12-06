@@ -2,46 +2,63 @@ package de.fh.swf.se.s2;
 
 public class Wahlmodul {
 
-	public String wModulName;
-	public int wCreditpoints;
-	public double wNote;
+	private String wModulname;
+	private int wCreditpoints;
+	private double wNote;
+	private String wBeschreibung;
+	private int wSemester;
 
-	public Wahlmodul(String wModulName, int wCreditpoints) {
-		this.wModulName = wModulName;
-		this.wCreditpoints = wCreditpoints;
+	public Wahlmodul(String modulname, int creditpoints, String beschreibung, int semester) {
+		this.wModulname = modulname;
+		this.wCreditpoints = creditpoints;
+		this.wBeschreibung= beschreibung;
+		this.wSemester = semester;
 	}
 
+
 	/**
-	 * 
-	 * @param pModulname
-	 * @param pCreditPoints
+	 *
+	 * @param wModulname
+	 * @param wCreditPoints
+	 * @param wBeschreibung
+	 * @param wSemester
 	 */
-	public void wModulname(String pModulname, int pCreditPoints) {
+	public void wModulname(String wModulname, int wCreditPoints, String wBeschreibung, int wSemester) {
 		// TODO - implement Wahlmodul.wModulname
-		//throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 
 	/**
-	 * 
-	 * @param pNote
+	 *
+	 * @param wNote
 	 */
-	public boolean addNote(double note) {
-		if (note >= 1.0 && note <= 5.0) {
-			this.wNote = note;
-			return true;
-		} else {
-			System.out.println("Ungültige Note. Die Note muss zwischen 1.0 und 5.0 liegen.");
-			return false;
-		}
+	public boolean addWNote(double wNote) {
+		this.wNote = wNote;
+		return true; // oder einen anderen booleschen Wert je nach Bedarf
 	}
 
+
+
+
 	/**
-	 * 
+	 *
 	 * @param wModulName
 	 */
 	public void wModulname(String wModulName) {
 		// TODO - implement Wahlmodul.wModulname
-		//throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 
+	public void addNote(double note) {
+		this.wNote = note;
+	}
+
+	// Getter-Methode für die Note des Wahlmoduls
+	public double getNote() {
+		return wNote;
+	}
+
+	public String getModulName() {
+		return wModulname;
+	}
 }
