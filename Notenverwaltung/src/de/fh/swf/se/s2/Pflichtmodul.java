@@ -5,10 +5,14 @@ public class Pflichtmodul {
 	public String pModulName;
 	public int pCreditpoints;
 	public double pNote;
+	private String pBeschreibung;
+	private int pSemester;
 
-	public Pflichtmodul(String pModulName, int pCreditPoints) {
-		this.pModulName = pModulName;
-		this.pCreditpoints = pCreditPoints;
+	public Pflichtmodul(String modulName, int creditpoints, String beschreibung, int semester) {
+		this.pModulName = modulName;
+		this.pCreditpoints = creditpoints;
+		this.pBeschreibung = beschreibung;
+		this.pSemester = semester;
 	}
 
 	/**
@@ -16,8 +20,8 @@ public class Pflichtmodul {
 	 * @param pModulName
 	 */
 	public void pModul(String pModulName) {
-		//TODO - implement Pflichtmodul.pModul
-		//throw new UnsupportedOperationException();
+		// TODO - implement Pflichtmodul.pModul
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -25,23 +29,33 @@ public class Pflichtmodul {
 	 * @param pNote
 	 */
 	public boolean addPNote(double pNote) {
-		if (pNote >= 1.0 && pNote <= 5.0) {
-			this.pNote = pNote;
-			return true;
-		} else {
-			System.out.println("Ungültige Note. Die Note muss zwischen 1.0 und 5.0 liegen.");
-			return false;
-		}
+		this.pNote = pNote;
+		return true;
 	}
+
 
 	/**
 	 * 
 	 * @param pModulName
 	 * @param pCreditPoints
+	 * @param pBeschreibung
+	 * @param pSemester
 	 */
-	public void pModul(String pModulName, int pCreditPoints) {
+	public void pModul(String pModulName, int pCreditPoints, String pBeschreibung, int pSemester) {
 		// TODO - implement Pflichtmodul.pModul
-		//throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
+	}
+
+
+
+	// Getter-Methode für Modulnamen
+	public String getModulName() {
+		return pModulName;
+	}
+
+	// Getter-Methode für die Note des Pflichtmoduls
+	public double getPNote() {
+		return pNote;
 	}
 
 }

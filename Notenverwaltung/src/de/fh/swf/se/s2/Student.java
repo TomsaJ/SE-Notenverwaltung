@@ -1,37 +1,49 @@
 package de.fh.swf.se.s2;
 
-import java.util.List;
 import java.util.ArrayList;
-
+import java.util.List;
 
 public class Student {
 
-	public long matrikelnummer;
+
+	private long matrikelnummer;
 	private String vorname;
 	private String nachname;
 	private String studiengang;
-
-	private List<Wahlmodul> wahlModule = new ArrayList<>();
-	private List<Pflichtmodul> pflichtModule = new ArrayList<>();
+	private List<Pflichtmodul> pflichtmodule;
+	private List<Wahlmodul> wahlmodule;
 	private Abschluss abschluss;
+
+	// Konstruktor für Student
+	public Student(String vorname, String nachname, long matrikelnummer , String studiengang) {
+		this.vorname = vorname;
+		this.nachname = nachname;
+		this.matrikelnummer = matrikelnummer;
+		this.studiengang = studiengang;
+		this.pflichtmodule = new ArrayList<>();
+		this.wahlmodule = new ArrayList<>();
+	}
 
 	/**
 	 * 
 	 * @param pModulName
 	 * @param pCreditpoints
+	 * @param pBeschreibung
+	 * @param pSemester
 	 */
-	public void addPflichtmodul(String pModulName, int pCreditpoints) {
+	public void addPflichtmodul(String pModulName, int pCreditpoints, String pBeschreibung, int pSemester) {
 		// TODO - implement Student.addPflichtmodul
+		System.out.println("Modul: " + pModulName + " erstellt");
 	}
 
 	/**
 	 * 
-	 * @param pflichtmodul
+	 * @param wahlmodul
 	 * @param pNote
 	 */
-	public void addNotetoPflichtModul(Pflichtmodul pflichtmodul, double pNote) {
+	public void addNotetoPflichtModul(Pflichtmodul wahlmodul, double pNote) {
 		// TODO - implement Student.addNotetoPflichtModul
-		//throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -40,51 +52,67 @@ public class Student {
 	 * @param pNote
 	 */
 	public void addNoteToPflichmodul(Pflichtmodul pflichtmodul, double pNote) {
-		if (pflichtmodul.addPNote(pNote)) {
-			System.out.println("Note " + pNote + " zu Pflichtmodul " + pflichtmodul.pModulName + " hinzugefügt.");
-		}
+		// TODO - implement Student.addNoteToPflichmodul
+		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * 
 	 * @param wModulName
 	 * @param wCredits
+	 * @param wBeschreibung
+	 * @param wSemester
 	 */
-	public void addWahlModul(String wModulName, int wCredits) {
-		Wahlmodul wahlmodul = new Wahlmodul(wModulName, wCredits);
-		wahlModule.add(wahlmodul);
-		System.out.println("Wahlmodul " + wModulName + " mit " + wCredits + " Credits hinzugefügt.");
+	public void addWahlmodul(String wModulName, int wCredits, String wBeschreibung, int wSemester) {
+		// TODO - implement Student.addWahlModul
+		System.out.println("Modul: " + wModulName + " erstellt");
 	}
 
 	/**
 	 * 
-	 * @param wahlmodul
+	 * @param wModulName
 	 * @param wNote
 	 */
-	public void addNoteToWahlModul(Wahlmodul wahlmodul, double wNote) {
-		if (wahlmodul.addNote(wNote)) {
-			System.out.println("Note " + wNote + " zu Wahlmodul " + wahlmodul.wModulName + " hinzugefügt.");
+	public void addNoteToWahlModul(String wModulName, double wNote) {
+		// TODO - implement Student.addNoteToWahlModul
+		System.out.println("Note " + wNote + " zum Wahlmodul " + wModulName + " hinzugefügt.");
+	}
+
+	/**
+	 * 
+	 * @param
+	 */
+	public double berechnePflichtmodulDurchschnitt() {
+		if (pflichtmodule.isEmpty()) {
+			return 0; // Keine Pflichtmodule vorhanden
 		}
+
+		double sum = 0.0;
+		for (Pflichtmodul pflichtmodul : pflichtmodule) {
+			sum += pflichtmodul.getPNote();
+		}
+
+		return sum / pflichtmodule.size();
 	}
+
 
 	/**
 	 * 
-	 * @param pflichtmodul
+	 * @param
 	 */
-	public double berechnePflichtmodulDurchschnitt(int pflichtmodul) {
-		// TODO - implement Student.berechnePflichtmodulDurchschnitt
-		//throw new UnsupportedOperationException();
-		return pflichtmodul;
+	public double berechneWahlModulDurchschnitt() {
+		if (wahlmodule.isEmpty()) {
+			return 0; // Keine Wahlmodule vorhanden
+		}
+
+		double sum = 0.0;
+		for (Wahlmodul wahlmodul : wahlmodule) {
+			sum += wahlmodul.getNote();
+		}
+
+		return sum / wahlmodule.size();
 	}
 
-	/**
-	 * 
-	 * @param wahlmodul
-	 */
-	public double berechneWahlModulDurchschnitt(int wahlmodul) {
-
-        return wahlmodul;
-    }
 
 	/**
 	 * 
@@ -94,7 +122,7 @@ public class Student {
 	 */
 	public void addAbschluss(String thema, double gewichtungArbeit, double gewichtungKolloquium) {
 		// TODO - implement Student.addAbschluss
-		//throw new UnsupportedOperationException();
+		System.out.println("Das Thema ist: " +thema  + " Die Gewichtung(Arbeit): " + gewichtungArbeit+" Die Gewichtung(Arbeit): " + gewichtungKolloquium);
 	}
 
 	/**
@@ -104,7 +132,7 @@ public class Student {
 	 */
 	public void addNoteToAbschlussA(String thema, double noteArbeit) {
 		// TODO - implement Student.addNoteToAbschlussA
-		//throw new UnsupportedOperationException();
+		System.out.println("Note der Arbeit: " + noteArbeit );
 	}
 
 	/**
@@ -114,7 +142,7 @@ public class Student {
 	 */
 	public void addNoteToAbschlussA(Abschluss abschluss, double noteArbeit) {
 		// TODO - implement Student.addNoteToAbschlussA
-		//throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -122,8 +150,9 @@ public class Student {
 	 * @param thema
 	 * @param noteKolloquium
 	 */
-	public void addNoteToAbschlussK(Abschluss thema, double noteKolloquium) {
-
+	public void addNoteToAbschlussK(String thema, double noteKolloquium) {
+		// TODO - implement Student.addNoteToAbschlussK
+		System.out.println("Note des Kolloquiums: " + noteKolloquium);
 	}
 
 	/**
@@ -133,7 +162,7 @@ public class Student {
 	 */
 	public void addnoteToAbschlussK(Abschluss abschluss, double noteKolloquium) {
 		// TODO - implement Student.addnoteToAbschlussK
-		//throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -141,35 +170,36 @@ public class Student {
 	 * @param pModulName
 	 * @param pNote
 	 */
-	public void addNoteToPflichmodul(String pModulName, double pNote) {
+	public void addNoteToPflichtModul(String pModulName, double pNote) {
 		// TODO - implement Student.addNoteToPflichmodul
-		//throw new UnsupportedOperationException();
+		System.out.println("Note " + pNote + " zum Wahlmodul " + pModulName + " hinzugefügt.");
 	}
 
 	/**
 	 * 
 	 * @param pflichtmodul
 	 */
-	public void addPflichmodul(Pflichtmodul pflichtmodul) {
-		pflichtModule.add(pflichtmodul);
-		System.out.println("Pflichtmodul " + pflichtmodul.pModulName + " hinzugefügt.");
+	public void addPflichtmodul(Pflichtmodul pflichtmodul) {
+		pflichtmodule.add(pflichtmodul);
 	}
+
 
 	/**
 	 * 
 	 * @param wahlmodul
 	 */
-	public void addWahlModul(Wahlmodul wahlmodul) {
-		wahlModule.add(wahlmodul);
-		System.out.println("Wahlmodul " + wahlmodul.wModulName + " hinzugefügt.");
+	public void addWahlmodul(Wahlmodul wahlmodul) {
+		wahlmodule.add(wahlmodul);
 	}
 
-	/**
-	 * @param wahlmodul
-	 * @param v
-	 */
-	public void addNoteToWahlmodul(Wahlmodul wahlmodul, double note) {
 
+	/**
+	 * 
+	 * @param wahlmodul
+	 */
+	public void addNoteToWahlmodul(Wahlmodul wahlmodul) {
+		// TODO - implement Student.addNoteToWahlmodul
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -178,7 +208,49 @@ public class Student {
 	 */
 	public void addAbschluss(Abschluss abschluss) {
 		this.abschluss = abschluss;
-		System.out.println("Abschluss hinzugefügt.");
 	}
+
+	public void setAbschluss(Abschluss abschluss) {
+		this.abschluss = abschluss;
+	}
+
+	public void addNoteToAbschlussA(double noteArbeit) {
+		abschluss.addNoteArbeit(noteArbeit);
+	}
+
+	public void addNoteToAbschlussK(double noteKolloquium) {
+		abschluss.addNoteKolloquium(noteKolloquium);
+	}
+
+	// Getter-Methoden für Matrikelnummer, Vorname, Nachname und Studiengang
+	public long getMatrikelnummer() {
+		return matrikelnummer;
+	}
+
+	public String getVorname() {
+		return vorname;
+	}
+
+	public String getNachname() {
+		return nachname;
+	}
+
+	public String getStudiengang() {
+		return studiengang;
+	}
+
+	// Getter-Methoden für Pflicht- und Wahlmodule sowie Abschluss
+	public List<Pflichtmodul> getPflichtmodule() {
+		return pflichtmodule;
+	}
+
+	public List<Wahlmodul> getWahlmodule() {
+		return wahlmodule;
+	}
+
+	public Abschluss getAbschluss() {
+		return abschluss;
+	}
+
 
 }
