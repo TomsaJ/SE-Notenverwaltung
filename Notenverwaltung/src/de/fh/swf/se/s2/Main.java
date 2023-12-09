@@ -4,8 +4,9 @@ public class Main {
     public static void main(String[] args) {
 
         // Erstellen eines Studenten
-        Student student = new Student("Max", "Mustermann",342456, "Informatik");
 
+        Student student = new Student("Max", "Mustermann",342456, "Informatik");
+/*
         // Hinzufügen von Pflichtmodulen
         Pflichtmodul pm1 = new Pflichtmodul("Mathematik", 5, "Beschreibung1", 1);
         Pflichtmodul pm2 = new Pflichtmodul("Java 2", 5, "Beschreibung2", 2);
@@ -34,14 +35,14 @@ public class Main {
         System.out.println("Student: " + student.getVorname() + " " + student.getNachname());
         System.out.println("Matrikelnummer: " + student.getMatrikelnummer());
         System.out.println("Studiengang: " + student.getStudiengang());
-
+*/
         // Ausgabe der Pflichtmodule und Noten
         System.out.println("Pflichtmodule und Noten:");
         student.getPflichtmodule().forEach(modul -> {
-            System.out.println(" - " + modul.getModulName() + " Note: " + modul.getPNote());
+            System.out.println(" - " + modul.getModulName() + " Note:" + modul.getPNote());
         });
 
-        // Ausgabe des Durchschnitts der Pflichtmodule
+   /*     // Ausgabe des Durchschnitts der Pflichtmodule
         System.out.println("Durchschnittsnote der Pflichtmodule: " + student.berechnePflichtmodulDurchschnitt());
 
         // Ausgabe der Wahlpflichtmodule und Noten
@@ -56,5 +57,7 @@ public class Main {
         // Ausgabe der Abschlussarbeit und der Durchschnittsnote
         System.out.println("Abschlussarbeit: " + student.getAbschluss().getThema());
         //System.out.println("Durchschnittsnote der Abschlussarbeit: " + student.getAbschluss().getFinalerDurchschnitt());
+
+         */
     }
 }

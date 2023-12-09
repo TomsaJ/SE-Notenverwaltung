@@ -1,7 +1,13 @@
 package de.fh.swf.se.s2;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Student {
 
@@ -22,7 +28,58 @@ public class Student {
 		this.studiengang = studiengang;
 		this.pflichtmodule = new ArrayList<>();
 		this.wahlmodule = new ArrayList<>();
+		modul();
 	}
+
+	private void modul() {
+		try {
+			var filePath = "Notenverwaltung/src/pflichtmodul.csv";
+			var file = Paths.get(filePath);
+
+			if (!Files.exists(file)) {
+				System.out.println("File not found: " + filePath);
+				return;
+			}
+
+			var fileContent = Files.readString(file, Charset.forName("UTF-8"));
+
+			// Trennen Sie die Zeilen der CSV-Datei
+			List<String> lines = Arrays.asList(fileContent.split("\n"));
+
+			// Iterieren Sie durch jede Zeile und verarbeiten Sie die Daten
+			for (String line : lines) {
+				// Trennen Sie die einzelnen Felder durch das Trennzeichen ";"
+				String[] fields = line.split(";");
+
+				// Validieren Sie die Länge des Arrays
+				if (fields.length >= 6) {
+					// Extrahieren Sie die Daten aus den Feldern
+					String student = fields[0];
+					String modulName = fields[1];
+					int creditPoints = Integer.parseInt(fields[2]);
+					String beschreibung = fields[3];
+					int semester = Integer.parseInt(fields[4]);
+					String noteStr = fields[5];
+
+
+					// Rufen Sie Ihre Methode auf, um die Daten zu verarbeiten
+					if(Objects.equals(student, nachname)) {
+						Pflichtmodul pm = new Pflichtmodul(modulName, creditPoints, beschreibung, semester);
+						addPflichtmodul(pm);
+						if (!noteStr.isEmpty()) {
+							double note = Double.parseDouble(noteStr);
+							pm.addPNote(note);
+						}
+					}
+
+				} else {
+					System.out.println("Warning: Insufficient fields in line");
+				}
+			}
+		} catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 	/**
 	 * 
