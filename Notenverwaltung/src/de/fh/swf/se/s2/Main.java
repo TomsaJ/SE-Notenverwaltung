@@ -1,4 +1,6 @@
 package de.fh.swf.se.s2;
+import java.util.Scanner;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -6,13 +8,10 @@ public class Main {
         // Erstellen eines Studenten
 
         Student student = new Student("Max", "Mustermann",342456, "Informatik");
-/*
-        // Hinzufügen von Pflichtmodulen
-        Pflichtmodul pm1 = new Pflichtmodul("Mathematik", 5, "Beschreibung1", 1);
-        Pflichtmodul pm2 = new Pflichtmodul("Java 2", 5, "Beschreibung2", 2);
-        student.addPflichtmodul(pm1);
-        student.addPflichtmodul(pm2);
 
+        // Hinzufügen von Pflichtmodulen
+
+/*
         pm1.addPNote(5.0); // Erster Versuch
         pm1.addPNote(1.3); // Zweiter Versuch
         pm2.addPNote(3.3);
@@ -37,10 +36,7 @@ public class Main {
         System.out.println("Studiengang: " + student.getStudiengang());
 */
         // Ausgabe der Pflichtmodule und Noten
-        System.out.println("Pflichtmodule und Noten:");
-        student.getPflichtmodule().forEach(modul -> {
-            System.out.println(" - " + modul.getModulName() + " Note:" + modul.getPNote());
-        });
+
 
    /*     // Ausgabe des Durchschnitts der Pflichtmodule
         System.out.println("Durchschnittsnote der Pflichtmodule: " + student.berechnePflichtmodulDurchschnitt());
@@ -59,5 +55,69 @@ public class Main {
         //System.out.println("Durchschnittsnote der Abschlussarbeit: " + student.getAbschluss().getFinalerDurchschnitt());
 
          */
+        menu(student);
     }
-}
+
+    public static void menu(Student student){
+        Scanner scanner = new Scanner(System.in);
+        String input;
+
+        do {
+            System.out.println("Pflichtmodule und Noten:");
+            student.getPflichtmodule().forEach(modul -> {
+                System.out.println(" - " + modul.getModulName() + " Note:" + modul.getNote());
+            });
+            // Menü anzeigen
+            System.out.println("1. Option 1");
+            System.out.println("2. Option 2");
+            System.out.println("3. Option 3");
+            System.out.println("4. Exit");
+            System.out.print("Bitte wählen Sie eine Option: ");
+
+            // Benutzereingabe lesen
+            input = scanner.nextLine();
+
+            // Menüoptionen verarbeiten
+            switch (input) {
+                case "1":
+                    Pflichtmodul pm1 = new Pflichtmodul("Mathematik", 5, "Beschreibung1", 1);
+                    Pflichtmodul pm2 = new Pflichtmodul("Java 2", 5, "Beschreibung2", 2);
+                    student.addPflichtmodul(pm1);
+                    student.addPflichtmodul(pm2);
+                    System.out.println("Sie haben Option 1 ausgewählt.");
+                    // Hier können Sie den Code für Option 1 hinzufügen
+                    break;
+                case "2":
+
+
+
+                    System.out.println("Modul einbgeb");
+                    String modul = scanner.nextLine();
+                    System.out.println("Note eingeben");
+                    double note = Double.parseDouble(scanner.nextLine());
+                    student.addNoteToPflichmodul(modul,note);
+
+                    // Hier können Sie den Code für Option 2 hinzufügen
+                    break;
+                case "3":
+                    System.out.println("Sie haben Option 3 ausgewählt.");
+                    // Hier können Sie den Code für Option 3 hinzufügen
+                    break;
+                case "4":
+                    student.save();
+                    System.out.println("Die Anwendung wird beendet.");
+                    break;
+                default:
+                    System.out.println("Ungültige Option. Bitte erneut eingeben.");
+            }
+
+        } while (!input.equals("4")); // Die Schleife läuft, bis der Benutzer "4" für "Exit" eingibt
+
+        // Aufräumarbeiten oder Abschlusscode können hier hinzugefügt werden
+
+        scanner.close();
+    }
+    }
+
+
+

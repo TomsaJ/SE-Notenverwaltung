@@ -1,6 +1,8 @@
 package de.fh.swf.se.s2;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Student {
 
@@ -29,9 +32,10 @@ public class Student {
 		this.pflichtmodule = new ArrayList<>();
 		this.wahlmodule = new ArrayList<>();
 		modul();
+
 	}
 
-	private void modul() {
+	public void modul() {
 		try {
 			var filePath = "Notenverwaltung/src/pflichtmodul.csv";
 			var file = Paths.get(filePath);
@@ -66,7 +70,7 @@ public class Student {
 					if(Objects.equals(student, nachname)) {
 						Pflichtmodul pm = new Pflichtmodul(modulName, creditPoints, beschreibung, semester);
 						addPflichtmodul(pm);
-						if (!noteStr.isEmpty()) {
+						if (!noteStr.isEmpty() && !noteStr.equals("0.0")) {
 							double note = Double.parseDouble(noteStr);
 							pm.addPNote(note);
 						}
@@ -108,9 +112,25 @@ public class Student {
 	 * @param pflichtmodul
 	 * @param pNote
 	 */
-	public void addNoteToPflichmodul(Pflichtmodul pflichtmodul, double pNote) {
-		// TODO - implement Student.addNoteToPflichmodul
-		throw new UnsupportedOperationException();
+	public  void addNoteToPflichmodul(String pflichtmodul, double pNote) {
+		Pflichtmodul pm1 = findePflichtmodul(pflichtmodul);
+
+		if (pm1 != null) {
+			pm1.addPNote(pNote);
+		} else {
+			System.out.println("Pflichtmodul nicht gefunden!");
+			// Hier könntest du weitere Fehlerbehandlung hinzufügen
+		}
+	}
+
+	// Annahme: Hier ist eine Methode zum Finden eines Pflichtmoduls anhand des Namens
+	private  Pflichtmodul findePflichtmodul(String pflichtmodulName) {
+		for (Pflichtmodul pm : pflichtmodule) {
+			if (pm.getModulName().equals(pflichtmodulName)) {
+				return pm;
+			}
+		}
+		return null; // Pflichtmodul nicht gefunden
 	}
 
 	/**
@@ -146,7 +166,7 @@ public class Student {
 
 		double sum = 0.0;
 		for (Pflichtmodul pflichtmodul : pflichtmodule) {
-			sum += pflichtmodul.getPNote();
+			sum += pflichtmodul.getNote();
 		}
 
 		return sum / pflichtmodule.size();
@@ -237,8 +257,23 @@ public class Student {
 	 * @param pflichtmodul
 	 */
 	public void addPflichtmodul(Pflichtmodul pflichtmodul) {
-		pflichtmodule.add(pflichtmodul);
+		if (!isModulNameInList(pflichtmodul.getModulName())) {
+			pflichtmodule.add(pflichtmodul);
+		} else {
+			System.out.println("Ein Pflichtmodul mit dem gleichen Namen existiert bereits.");
+			// Hier könntest du weitere Fehlerbehandlung hinzufügen
+		}
 	}
+
+	public boolean isModulNameInList(String modulName) {
+		for (Pflichtmodul pm : pflichtmodule) {
+			if (pm.getModulName().equals(modulName)) {
+				return true; // Pflichtmodul mit dem gegebenen Namen gefunden
+			}
+		}
+		return false; // Pflichtmodul mit dem gegebenen Namen nicht gefunden
+	}
+
 
 
 	/**
@@ -257,6 +292,32 @@ public class Student {
 	public void addNoteToWahlmodul(Wahlmodul wahlmodul) {
 		// TODO - implement Student.addNoteToWahlmodul
 		throw new UnsupportedOperationException();
+	}
+
+	public void save (){
+		try {
+			//first method
+			var writer = new PrintWriter(
+					"Notenverwaltung/src/pflichtmodul.csv", "UTF-8");
+			getPflichtmodule().forEach(modul -> {
+				writer.println(nachname + ";" +   modul.getModulName() + ";" + modul.getCreditpoints()+ ";" + modul.getBeschreibung()  + ";" + modul.getSemester()+";" + modul.getNote() + ";");
+			});
+			writer.close();
+	/*
+	String student = fields[0];
+					String modulName = fields[1];
+					int creditPoints = Integer.parseInt(fields[2]);
+					String beschreibung = fields[3];
+					int semester = Integer.parseInt(fields[4]);
+					String noteStr = fields[5];
+			//second method
+			var text = "Line 1\nLine 2";
+			var file = Paths.get("file.txt");
+			Files.writeString(file, text,
+					Charset.forName("UTF-8")); */
+		} catch (IOException e) {
+			System.out.println(e);
+		}
 	}
 
 	/**
