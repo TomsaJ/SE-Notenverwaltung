@@ -8,53 +8,6 @@ public class Main {
         // Erstellen eines Studenten
 
         Student student = new Student("Max", "Mustermann",342456, "Informatik");
-
-        // Hinzufügen von Pflichtmodulen
-
-/*
-        pm1.addPNote(5.0); // Erster Versuch
-        pm1.addPNote(1.3); // Zweiter Versuch
-        pm2.addPNote(3.3);
-
-        // Hinzufügen von Wahlpflichtmodulen
-        Wahlmodul wm1 = new Wahlmodul("Webentwicklung", 5, "Beschreibung3", 3);
-        Wahlmodul wm2 = new Wahlmodul("Mobile Applikationen", 5, "Beschreibung4", 4);
-        student.addWahlmodul(wm1);
-        student.addWahlmodul(wm2);
-        wm1.addWNote(5.0); // Erster Versuch
-        wm1.addWNote(1.2); // Zweiter Versuch
-        wm2.addWNote(2.3);
-
-
-        // Hinzufügen eines Abschlusses
-        Abschluss abschluss = new Abschluss("Bachelor Informatik", 0.7, 0.3);
-        student.addAbschluss(abschluss);
-
-        // Ausgabe der Informationen
-        System.out.println("Student: " + student.getVorname() + " " + student.getNachname());
-        System.out.println("Matrikelnummer: " + student.getMatrikelnummer());
-        System.out.println("Studiengang: " + student.getStudiengang());
-*/
-        // Ausgabe der Pflichtmodule und Noten
-
-
-   /*     // Ausgabe des Durchschnitts der Pflichtmodule
-        System.out.println("Durchschnittsnote der Pflichtmodule: " + student.berechnePflichtmodulDurchschnitt());
-
-        // Ausgabe der Wahlpflichtmodule und Noten
-        System.out.println("Wahlmodule und Noten:");
-        student.getWahlmodule().forEach(modul -> {
-            System.out.println(" - " + modul.getModulName() + " Note: " + modul.getNote());
-        });
-
-        // Ausgabe des Durchschnitts der Wahlpflichtmodule
-        System.out.println("Durchschnittsnote der Wahlpflichtmodule: " + student.berechneWahlModulDurchschnitt());
-
-        // Ausgabe der Abschlussarbeit und der Durchschnittsnote
-        System.out.println("Abschlussarbeit: " + student.getAbschluss().getThema());
-        //System.out.println("Durchschnittsnote der Abschlussarbeit: " + student.getAbschluss().getFinalerDurchschnitt());
-
-         */
         menu(student);
     }
 
@@ -64,11 +17,22 @@ public class Main {
 
         do {
             System.out.println("Pflichtmodule und Noten:");
+            System.out.printf("%-20s|%-20s|%-15s|%-10s|%-10s%n", "Modulname", "Beschreibung", "Creditpoints",  "Note", "Semester");
+            System.out.println("-----------------------------------------------------------------------------");
             student.getPflichtmodule().forEach(modul -> {
-                System.out.println(" - " + modul.getModulName() + " Note:" + modul.getNote());
+                System.out.printf("%-20s|%-20s|%-15s|%-10s|%-10s%n",
+                        modul.getModulName(),
+                        modul.getBeschreibung(),
+                        modul.getCreditpoints(),
+                        modul.getNote(),
+                        modul.getSemester());
             });
+
+            System.out.println("-----------------------------------------------------------------------------");
+
+
             // Menü anzeigen
-            System.out.println("1. Option 1");
+            System.out.println("1. Neues Pflichtmodul hinzufügen");
             System.out.println("2. Option 2");
             System.out.println("3. Option 3");
             System.out.println("4. Exit");
@@ -80,22 +44,35 @@ public class Main {
             // Menüoptionen verarbeiten
             switch (input) {
                 case "1":
-                    Pflichtmodul pm1 = new Pflichtmodul("Mathematik", 5, "Beschreibung1", 1);
-                    Pflichtmodul pm2 = new Pflichtmodul("Java 2", 5, "Beschreibung2", 2);
-                    student.addPflichtmodul(pm1);
-                    student.addPflichtmodul(pm2);
+                    String name;
+                    int credit;
+                    String beschreibung;
+                    int semester;
+                    do {
+                        System.out.println("Modulname");
+                        name = scanner.nextLine();
+                        System.out.println("Creditpoints");
+                        credit = Integer.parseInt(scanner.nextLine());
+                        System.out.println("Beschreibung");
+                        beschreibung = scanner.nextLine();
+                        System.out.println("Semester");
+                        semester = Integer.parseInt(scanner.nextLine());
+                        System.out.println("Passt alles? Ja/Nein");
+                        input = scanner.nextLine();
+                    } while (!input.equals("Ja"));
+                    Pflichtmodul pm = new Pflichtmodul(name, credit, beschreibung, semester);
+                    student.addPflichtmodul(pm);
                     System.out.println("Sie haben Option 1 ausgewählt.");
                     // Hier können Sie den Code für Option 1 hinzufügen
                     break;
                 case "2":
 
 
-
                     System.out.println("Modul einbgeb");
                     String modul = scanner.nextLine();
                     System.out.println("Note eingeben");
                     double note = Double.parseDouble(scanner.nextLine());
-                    student.addNoteToPflichmodul(modul,note);
+                    student.addNoteToPflichmodul(modul, note);
 
                     // Hier können Sie den Code für Option 2 hinzufügen
                     break;
