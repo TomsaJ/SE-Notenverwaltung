@@ -1,14 +1,63 @@
 package de.fh.swf.se.s2;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 
 public class Main {
     public static void main(String[] args) {
-
+        Scanner scanner = new Scanner(System.in);
+        Student student = null;
         // Erstellen eines Studenten
+        System.out.println("logg In(Nachname):");
 
-        Student student = new Student("Max", "Mustermann", 342456, "Informatik");
+        String lnachname = scanner.nextLine();
+            try {
+                var filePath = "/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Student.csv";
+                var file = Paths.get(filePath);
+
+                if (!Files.exists(file)) {
+                    System.out.println("File not found: " + filePath);
+                    return;
+                }
+
+                var fileContent = Files.readString(file, Charset.forName("UTF-8"));
+
+                // Trennen Sie die Zeilen der CSV-Datei
+                List<String> lines = Arrays.asList(fileContent.split("\n"));
+
+                // Iterieren Sie durch jede Zeile und verarbeiten Sie die Daten
+                for (String line : lines) {
+                    // Trennen Sie die einzelnen Felder durch das Trennzeichen ";"
+                    String[] fields = line.split(";");
+
+                    // Validieren Sie die Länge des Arrays
+                    if (fields.length >= 4) {
+                        // Extrahieren Sie die Daten aus den Feldern
+                        String vorname = fields[0];
+                        String nachname = fields[1];
+                        int matrikelnummer = Integer.parseInt(fields[2]);
+                        String studiengang = fields[3];
+
+
+                        // Rufen Sie Ihre Methode auf, um die Daten zu verarbeiten
+                        if(Objects.equals(nachname, lnachname)) {
+                            student = new Student (vorname,nachname,matrikelnummer,studiengang);
+                        }
+
+                    } else {
+                        System.out.println("Warning: Insufficient fields in line");
+                    }
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
         menu(student);
     }
 
