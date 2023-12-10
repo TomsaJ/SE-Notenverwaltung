@@ -37,7 +37,7 @@ public class Student {
 
 	public void modul() {
 		try {
-			var filePath = "Notenverwaltung/src/pflichtmodul.csv";
+			var filePath = "/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Module.csv";
 			var file = Paths.get(filePath);
 
 			if (!Files.exists(file)) {
@@ -56,23 +56,36 @@ public class Student {
 				String[] fields = line.split(";");
 
 				// Validieren Sie die Länge des Arrays
-				if (fields.length >= 6) {
+				if (fields.length >= 8) {
 					// Extrahieren Sie die Daten aus den Feldern
 					String student = fields[0];
-					String modulName = fields[1];
-					int creditPoints = Integer.parseInt(fields[2]);
-					String beschreibung = fields[3];
-					int semester = Integer.parseInt(fields[4]);
-					String noteStr = fields[5];
+					String modul = fields[1];
+					String modulName = fields[2];
+					int creditPoints = Integer.parseInt(fields[3]);
+					String beschreibung = fields[4];
+					int semester = Integer.parseInt(fields[5]);
+					String noteStr = fields[6];
+					int versuch = Integer.parseInt(fields[7]);
 
 
 					// Rufen Sie Ihre Methode auf, um die Daten zu verarbeiten
 					if(Objects.equals(student, nachname)) {
-						Pflichtmodul pm = new Pflichtmodul(modulName, creditPoints, beschreibung, semester);
-						addPflichtmodul(pm);
-						if (!noteStr.isEmpty() && !noteStr.equals("0.0")) {
-							double note = Double.parseDouble(noteStr);
-							pm.addPNote(note);
+						if(Objects.equals(modul, "p")) {
+							Pflichtmodul pm = new Pflichtmodul(modulName, creditPoints, beschreibung, semester);
+							addPflichtmodul(pm);
+							if (!noteStr.isEmpty() && !noteStr.equals("0.0")) {
+								double note = Double.parseDouble(noteStr);
+								pm.addPNote(note,"l");
+								pm.addPVersuch(versuch);
+							}
+						}else if(Objects.equals(modul, "w")){
+							Wahlmodul wm = new Wahlmodul(modulName, creditPoints, beschreibung, semester);
+							addWahlmodul(wm);
+							if (!noteStr.isEmpty() && !noteStr.equals("0.0")) {
+								double note = Double.parseDouble(noteStr);
+								wm.addWNote(note,"l");
+								wm.addWVersuch(versuch);
+							}
 						}
 					}
 
@@ -116,7 +129,7 @@ public class Student {
 		Pflichtmodul pm1 = findePflichtmodul(pflichtmodul);
 
 		if (pm1 != null) {
-			pm1.addPNote(pNote);
+			pm1.addPNote(pNote,"n");
 		} else {
 			System.out.println("Pflichtmodul nicht gefunden!");
 			// Hier könntest du weitere Fehlerbehandlung hinzufügen
@@ -151,8 +164,23 @@ public class Student {
 	 * @param wNote
 	 */
 	public void addNoteToWahlModul(String wModulName, double wNote) {
-		// TODO - implement Student.addNoteToWahlModul
-		System.out.println("Note " + wNote + " zum Wahlmodul " + wModulName + " hinzugefügt.");
+		Wahlmodul wm = findeWahlmodul(wModulName);
+
+		if (wm != null) {
+			wm.addWNote(wNote,"n");
+		} else {
+			System.out.println("Pflichtmodul nicht gefunden!");
+			// Hier könntest du weitere Fehlerbehandlung hinzufügen
+		}
+	}
+
+	private  Wahlmodul findeWahlmodul(String wahlmodulName) {
+		for (Wahlmodul wm : wahlmodule) {
+			if (wm.getModulName().equals(wahlmodulName)) {
+				return wm;
+			}
+		}
+		return null; // Pflichtmodul nicht gefunden
 	}
 
 	/**
@@ -298,23 +326,14 @@ public class Student {
 		try {
 			//first method
 			var writer = new PrintWriter(
-					"Notenverwaltung/src/pflichtmodul.csv", "UTF-8");
+					"/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Module.csv", "UTF-8");
 			getPflichtmodule().forEach(modul -> {
-				writer.println(nachname + ";" +   modul.getModulName() + ";" + modul.getCreditpoints()+ ";" + modul.getBeschreibung()  + ";" + modul.getSemester()+";" + modul.getNote() + ";");
+				writer.println(nachname + ";" + "p;" +   modul.getModulName() + ";" + modul.getCreditpoints()+ ";" + modul.getBeschreibung()  + ";" + modul.getSemester()+";" + modul.getNote() + ";" + modul.getVersuch()+";");
+			});
+			getWahlmodule().forEach(modul -> {
+				writer.println(nachname + ";" + "w;" +   modul.getModulName() + ";" + modul.getCreditpoints()+ ";" + modul.getBeschreibung()  + ";" + modul.getSemester()+";" + modul.getNote() + ";" + modul.getVersuch()+";");
 			});
 			writer.close();
-	/*
-	String student = fields[0];
-					String modulName = fields[1];
-					int creditPoints = Integer.parseInt(fields[2]);
-					String beschreibung = fields[3];
-					int semester = Integer.parseInt(fields[4]);
-					String noteStr = fields[5];
-			//second method
-			var text = "Line 1\nLine 2";
-			var file = Paths.get("file.txt");
-			Files.writeString(file, text,
-					Charset.forName("UTF-8")); */
 		} catch (IOException e) {
 			System.out.println(e);
 		}

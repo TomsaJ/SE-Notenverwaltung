@@ -1,4 +1,5 @@
 package de.fh.swf.se.s2;
+import java.io.IOException;
 import java.util.Scanner;
 
 
@@ -7,20 +8,39 @@ public class Main {
 
         // Erstellen eines Studenten
 
-        Student student = new Student("Max", "Mustermann",342456, "Informatik");
+        Student student = new Student("Max", "Mustermann", 342456, "Informatik");
         menu(student);
     }
 
-    public static void menu(Student student){
+    public static void menu(Student student) {
         Scanner scanner = new Scanner(System.in);
         String input;
+        String name;
+        int credit;
+        String beschreibung;
+        int semester;
+        String modulname;
+        double note;
 
         do {
+            System.out.println("Name:" + student.getVorname() + " " + student.getNachname());
             System.out.println("Pflichtmodule und Noten:");
-            System.out.printf("%-20s|%-20s|%-15s|%-10s|%-10s%n", "Modulname", "Beschreibung", "Creditpoints",  "Note", "Semester");
-            System.out.println("-----------------------------------------------------------------------------");
+            System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s|%-8s%n", "Modulname", "Beschreibung", "Creditpoints", "Note", "Semester", "Versuch");
+            System.out.println("-----------------------------------------------------------------------------------------------------------");
             student.getPflichtmodule().forEach(modul -> {
-                System.out.printf("%-20s|%-20s|%-15s|%-10s|%-10s%n",
+                System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s|%-8s%n",
+                        modul.getModulName(),
+                        modul.getBeschreibung(),
+                        modul.getCreditpoints(),
+                        modul.getNote(),
+                        modul.getSemester(),
+                        modul.getVersuch());
+            });
+            System.out.println("\nWahlmodule und Noten:");
+            System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s%n", "Modulname", "Beschreibung", "Creditpoints", "Note", "Semester");
+            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            student.getWahlmodule().forEach(modul -> {
+                System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s%n",
                         modul.getModulName(),
                         modul.getBeschreibung(),
                         modul.getCreditpoints(),
@@ -28,26 +48,42 @@ public class Main {
                         modul.getSemester());
             });
 
-            System.out.println("-----------------------------------------------------------------------------");
+            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            System.out.println("\nAbschluss");
+            Abschluss abschluss = student.getAbschluss();
+            if (abschluss == null) {
+                System.out.println("Kein Abschluss vorhanden");
+            } else {
+                if (abschluss.getThema() == null) {
+                    System.out.println("Thema nicht festgelegt");
+                } else {
+                    System.out.println(abschluss.getThema());
+                }
+            }
+
+            System.out.println("-----------------------------------------------------------------------------------------------------------");
 
 
             // Menü anzeigen
             System.out.println("1. Neues Pflichtmodul hinzufügen");
-            System.out.println("2. Option 2");
-            System.out.println("3. Option 3");
-            System.out.println("4. Exit");
+            System.out.println("2. Note Pflichtmodul");
+            System.out.println("3. Neues Wahlmodul hinzufügen");
+            System.out.println("4. Note Wahlmodul");
+            System.out.println("5. Einzelnes Modul");
+            System.out.println("6. Abschluss erstellen");
+
+            System.out.println("9. Exit");
+
+
             System.out.print("Bitte wählen Sie eine Option: ");
 
             // Benutzereingabe lesen
             input = scanner.nextLine();
-
+            clearScreen();
             // Menüoptionen verarbeiten
             switch (input) {
                 case "1":
-                    String name;
-                    int credit;
-                    String beschreibung;
-                    int semester;
+
                     do {
                         System.out.println("Modulname");
                         name = scanner.nextLine();
@@ -66,35 +102,127 @@ public class Main {
                     // Hier können Sie den Code für Option 1 hinzufügen
                     break;
                 case "2":
-
-
                     System.out.println("Modul einbgeb");
-                    String modul = scanner.nextLine();
+                    modulname = scanner.nextLine();
                     System.out.println("Note eingeben");
-                    double note = Double.parseDouble(scanner.nextLine());
-                    student.addNoteToPflichmodul(modul, note);
+                    note = Double.parseDouble(scanner.nextLine());
+                    student.addNoteToPflichmodul(modulname, note);
 
                     // Hier können Sie den Code für Option 2 hinzufügen
                     break;
                 case "3":
-                    System.out.println("Sie haben Option 3 ausgewählt.");
+                    do {
+                        System.out.println("Modulname");
+                        name = scanner.nextLine();
+                        System.out.println("Creditpoints");
+                        credit = Integer.parseInt(scanner.nextLine());
+                        System.out.println("Beschreibung");
+                        beschreibung = scanner.nextLine();
+                        System.out.println("Semester");
+                        semester = Integer.parseInt(scanner.nextLine());
+                        System.out.println("Passt alles? Ja/Nein");
+                        input = scanner.nextLine();
+                    } while (!input.equals("Ja"));
+                    Wahlmodul wm = new Wahlmodul(name, credit, beschreibung, semester);
+                    student.addWahlmodul(wm);
+                    System.out.println("Sie haben Option 1 ausgewählt.");
+                    // Hier können Sie den Code für Option 1 hinzufügen
                     // Hier können Sie den Code für Option 3 hinzufügen
                     break;
                 case "4":
+                    System.out.println("Modul einbgeb");
+                    modulname = scanner.nextLine();
+                    System.out.println("Note eingeben");
+                    note = Double.parseDouble(scanner.nextLine());
+                    student.addNoteToWahlModul(modulname, note);
+
+                case "5":
+                    System.out.println("Modul eingeben");
+                    modulname = scanner.nextLine();
+                    einzelmodul(modulname, student);
+
+                    // Hier können Sie den Code für Option 2 hinzufügen
+                    break;
+                case "6":
+                    System.out.println("Thema:");
+                    String thema = scanner.nextLine();
+                    System.out.println("Gewichtung Arbeit");
+                    double arbeit = Double.parseDouble(scanner.nextLine());
+                    System.out.println("Gewichtung Kolloquium");
+                    double kolloquium = Double.parseDouble(scanner.nextLine());
+                    Abschluss abschluss1 = new Abschluss(thema, arbeit, kolloquium);
+                    student.addAbschluss(abschluss1);
+                    break;
+                case "9":
                     student.save();
-                    System.out.println("Die Anwendung wird beendet.");
                     break;
                 default:
                     System.out.println("Ungültige Option. Bitte erneut eingeben.");
             }
 
-        } while (!input.equals("4")); // Die Schleife läuft, bis der Benutzer "4" für "Exit" eingibt
+            clearScreen();
+
+        } while (!input.equals("9")); // Die Schleife läuft, bis der Benutzer "4" für "Exit" eingibt
 
         // Aufräumarbeiten oder Abschlusscode können hier hinzugefügt werden
-
+        System.out.println("Daten gespeichert");
+        System.out.println("Die Anwendung wird beendet.");
         scanner.close();
     }
+
+    public static void einzelmodul(String modulname, Student student) {
+        boolean fund = true;
+        for (Wahlmodul modul : student.getWahlmodule()) {
+            // Überprüfe, ob das aktuelle Modul den gesuchten Modulnamen hat
+            if (modul.getModulName().equals("BWL")) {
+                // Ausgabe nur für das Modul mit dem Namen "test"
+                System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s%n",
+                        modul.getModulName(),
+                        modul.getBeschreibung(),
+                        modul.getCreditpoints(),
+                        modul.getNote(),
+                        modul.getSemester());
+
+                // Da das gewünschte Modul gefunden wurde, kann die Schleife verlassen werden
+                fund = true;
+                break;
+            }
+            fund = false;
+        }
+        if(!fund) {
+            for (Pflichtmodul modul : student.getPflichtmodule()) {
+                // Überprüfe, ob das aktuelle Modul den gesuchten Modulnamen hat
+                if (modul.getModulName().equals(modulname)) {
+                    // Ausgabe nur für das Modul mit dem Namen "test"
+                    System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s%n",
+                            modul.getModulName(),
+                            modul.getBeschreibung(),
+                            modul.getCreditpoints(),
+                            modul.getNote(),
+                            modul.getSemester());
+
+                    // Da das gewünschte Modul gefunden wurde, kann die Schleife verlassen werden
+                    break;
+                }
+            }
+        }
     }
 
+    public static void clearScreen() {
+        try {
+            final String os = System.getProperty("os.name");
 
-
+            if (os.contains("Windows")) {
+                // For Windows
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                // For Linux/Unix/Mac or other environments
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (Exception e) {
+            // Handle exceptions here
+            e.printStackTrace();
+        }
+    }
+}
