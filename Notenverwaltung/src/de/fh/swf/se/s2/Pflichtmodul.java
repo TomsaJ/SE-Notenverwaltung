@@ -1,18 +1,29 @@
 package de.fh.swf.se.s2;
-
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.*;
+import java.util.*;
 public class Pflichtmodul {
 
-	public String pModulName;
-	public int pCreditpoints;
-	public double pNote;
+	private String pModulName;
+	private int pCreditpoints;
+	private double pNote;
+
+	private int pVersuch;
 	private String pBeschreibung;
 	private int pSemester;
 
-	public Pflichtmodul(String modulName, int creditpoints, String beschreibung, int semester) {
+    private double[] mNote = {1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0 ,3.3, 3.7, 4.0, 5.0};
+
+
+    public Pflichtmodul(String modulName, int creditpoints, String beschreibung, int semester) {
 		this.pModulName = modulName;
 		this.pCreditpoints = creditpoints;
 		this.pBeschreibung = beschreibung;
 		this.pSemester = semester;
+		//pModul(modulName,creditpoints,beschreibung,semester);
 	}
 
 	/**
@@ -28,8 +39,36 @@ public class Pflichtmodul {
 	 * 
 	 * @param pNote
 	 */
-	public boolean addPNote(double pNote) {
-		this.pNote = pNote;
+	public boolean addPNote(double pNote,String s) {
+		int i = 0;
+		if((this.pNote == 0.0 && this.pVersuch != 3) || (this.pNote == 5.0 && this.pVersuch != 3)) {
+			if (pNote >= 1.0 && pNote <= 5.0) {
+				while (mNote[i] != pNote) {
+					if (i > 10) {
+						System.out.println("Keine gültige Note");
+						return false;
+					}
+					i++;
+				}
+				if (mNote[i] == pNote) {
+					this.pNote = pNote;
+					if(Objects.equals(s, "n")) {
+						this.pVersuch = this.pVersuch + 1;
+					}
+					return true;
+				}
+
+			}
+		}
+        return false;
+    }
+
+	/**
+	 *
+	 * @param pVersuch
+	 */
+	public boolean addPVersuch(int pVersuch) {
+		this.pVersuch = pVersuch;
 		return true;
 	}
 
@@ -42,8 +81,7 @@ public class Pflichtmodul {
 	 * @param pSemester
 	 */
 	public void pModul(String pModulName, int pCreditPoints, String pBeschreibung, int pSemester) {
-		// TODO - implement Pflichtmodul.pModul
-		throw new UnsupportedOperationException();
+
 	}
 
 
@@ -54,8 +92,22 @@ public class Pflichtmodul {
 	}
 
 	// Getter-Methode für die Note des Pflichtmoduls
-	public double getPNote() {
+	public double getNote() {
 		return pNote;
+	}
+	public int getCreditpoints() {
+		return pCreditpoints;
+	}
+	public String getBeschreibung() {
+		return pBeschreibung;
+	}
+
+	// Getter-Methode für die Note des Pflichtmoduls
+	public int getSemester() {
+		return pSemester;
+	}
+	public int getVersuch() {
+		return pVersuch;
 	}
 
 }
