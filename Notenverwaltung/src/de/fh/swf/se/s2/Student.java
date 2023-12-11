@@ -405,7 +405,6 @@ public class Student {
 	public void addAbschluss(Abschluss abschluss1) {
 		if (abschluss1 != null) {
 			abschluss.add(abschluss1);
-
 		}
 	}
 

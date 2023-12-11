@@ -13,6 +13,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Student student = null;
+        clearScreen();
         // Erstellen eines Studenten
         System.out.println("logg In(Nachname):");
 
@@ -57,7 +58,7 @@ public class Main {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
+        clearScreen();
         menu(student);
     }
 
@@ -72,36 +73,46 @@ public class Main {
         double note;
 
         do {
-            System.out.println("Name:" + student.getVorname() + " " + student.getNachname());
-            System.out.println("Pflichtmodule und Noten:");
-            System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s|%-8s%n", "Modulname", "Beschreibung", "Creditpoints", "Note", "Semester", "Versuch");
+            System.out.printf("%-50s|%-20s|%-15s%n",
+                    "Student",
+                    "Matrikelnummer",
+                    "Studiengang"
+            );
+            System.out.printf("%-25s%-25s|%-20s|%-15s%n",
+                    student.getVorname(), // String
+                    student.getNachname(), // String
+                    student.getMatrikelnummer(), // int
+                    student.getStudiengang() // String
+            );
+
+            System.out.println("\nPflichtmodule und Noten:");
+            System.out.printf("%-20s|%-40s|%-15s%n", "Modulname", "Beschreibung", "Semester");
             System.out.println("-----------------------------------------------------------------------------------------------------------");
             student.getPflichtmodule().forEach(modul -> {
-                System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s|%-8s%n",
+                System.out.printf("%-20s|%-40s|%-15s%n",
                         modul.getModulName(),
                         modul.getBeschreibung(),
-                        modul.getCreditpoints(),
-                        modul.getNote(),
-                        modul.getSemester(),
-                        modul.getVersuch());
+                        modul.getSemester());
             });
             System.out.println("\nWahlmodule und Noten:");
-            System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s%n", "Modulname", "Beschreibung", "Creditpoints", "Note", "Semester");
+            System.out.printf("%-20s|%-40s|%-15s%n", "Modulname", "Beschreibung", "Semester");
             System.out.println("-----------------------------------------------------------------------------------------------------------");
             student.getWahlmodule().forEach(modul -> {
-                System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s%n",
+                System.out.printf("%-20s|%-40s|%-15s%n",
                         modul.getModulName(),
                         modul.getBeschreibung(),
-                        modul.getCreditpoints(),
-                        modul.getNote(),
                         modul.getSemester());
             });
 
             System.out.println("-----------------------------------------------------------------------------------------------------------");
-            System.out.println("\nAbschluss");
-
+            System.out.println("\nAbschluss:");
+            System.out.printf("%-20s|%-40s|%-20s%n","Thema","Note Arbeit","Note Kolloquium");
+            System.out.println("-----------------------------------------------------------------------------------------------------------");
             student.getAbschluss().forEach(abschluss -> {
-            System.out.println(abschluss.getThema()+" "+ abschluss.getNoteArbeit()+ " "+ abschluss.getNoteArbeit());
+                System.out.printf("%-20s|%-40s|%-20s%n",
+                        abschluss.getThema(),
+                        abschluss.getNoteArbeit(),
+                        abschluss.getNoteArbeit());
             });
 
 
@@ -109,12 +120,10 @@ public class Main {
 
 
             // Menü anzeigen
-            System.out.println("1. Neues Pflichtmodul hinzufügen");
-            System.out.println("2. Note Pflichtmodul");
-            System.out.println("3. Neues Wahlmodul hinzufügen");
-            System.out.println("4. Note Wahlmodul");
-            System.out.println("5. Einzelnes Modul");
-            System.out.println("6. Abschluss erstellen");
+            System.out.println("\n1. Neues Pflichtmodul hinzufügen");
+            System.out.println("2. Neues Wahlmodul hinzufügen");
+            System.out.println("3. Modul Detail");
+            System.out.println("4. Abschluss");
 
             System.out.println("9. Exit");
 
@@ -145,16 +154,8 @@ public class Main {
                     System.out.println("Sie haben Option 1 ausgewählt.");
                     // Hier können Sie den Code für Option 1 hinzufügen
                     break;
-                case "2":
-                    System.out.println("Modul einbgeb");
-                    modulname = scanner.nextLine();
-                    System.out.println("Note eingeben");
-                    note = Double.parseDouble(scanner.nextLine());
-                    student.addNoteToPflichmodul(modulname, note);
 
-                    // Hier können Sie den Code für Option 2 hinzufügen
-                    break;
-                case "3":
+                case "2":
                     do {
                         System.out.println("Modulname");
                         name = scanner.nextLine();
@@ -173,21 +174,28 @@ public class Main {
                     // Hier können Sie den Code für Option 1 hinzufügen
                     // Hier können Sie den Code für Option 3 hinzufügen
                     break;
-                case "4":
-                    System.out.println("Modul einbgeb");
-                    modulname = scanner.nextLine();
-                    System.out.println("Note eingeben");
-                    note = Double.parseDouble(scanner.nextLine());
-                    student.addNoteToWahlModul(modulname, note);
-
-                case "5":
+                case "3":
                     System.out.println("Modul eingeben");
                     modulname = scanner.nextLine();
-                    einzelmodul(modulname, student);
-
+                    clearScreen();
+                    while (true){
+                    String art = einzelmodul(modulname, student);
+                    System.out.printf("\n%-50s%-15s%n", "1. Noten für "+ modulname +  " eintragen", "2. Verlassen");
+                    // Benutzereingabe lesen
+                    input = scanner.nextLine();
+                    if (input.equals("1")) {
+                        System.out.println("\nNote für "+ modulname +" eingeben");
+                        note = Double.parseDouble(scanner.nextLine());
+                        if(Objects.equals(art, "Pflicht")){
+                            student.addNoteToPflichmodul(modulname, note);
+                        }else if(Objects.equals(art, "Wahl")){
+                            student.addNoteToWahlModul(modulname, note);
+                        }
+                    }else{break;}}
                     // Hier können Sie den Code für Option 2 hinzufügen
                     break;
-                case "6":
+                case "4":
+
                     System.out.println("Thema:");
                     String thema = scanner.nextLine();
                     System.out.println("Gewichtung Arbeit");
@@ -214,42 +222,55 @@ public class Main {
         scanner.close();
     }
 
-    public static void einzelmodul(String modulname, Student student) {
-        boolean fund = true;
+    public static String einzelmodul(String modulname, Student student) {
+        String art = null;
+        boolean fund = false;
+        System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s|%-8s%n", "Modulname", "Beschreibung", "Creditpoints", "Note", "Semester", "Versuch");
         for (Wahlmodul modul : student.getWahlmodule()) {
             // Überprüfe, ob das aktuelle Modul den gesuchten Modulnamen hat
-            if (modul.getModulName().equals("BWL")) {
+            if (modul.getModulName().equals(modulname)) {
                 // Ausgabe nur für das Modul mit dem Namen "test"
-                System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s%n",
+
+                System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s|%-8s%n",
                         modul.getModulName(),
                         modul.getBeschreibung(),
                         modul.getCreditpoints(),
                         modul.getNote(),
-                        modul.getSemester());
+                        modul.getSemester(),
+                        modul.getVersuch());
 
                 // Da das gewünschte Modul gefunden wurde, kann die Schleife verlassen werden
+                art = "Wahl";
                 fund = true;
                 break;
             }
-            fund = false;
+
         }
         if(!fund) {
             for (Pflichtmodul modul : student.getPflichtmodule()) {
                 // Überprüfe, ob das aktuelle Modul den gesuchten Modulnamen hat
                 if (modul.getModulName().equals(modulname)) {
                     // Ausgabe nur für das Modul mit dem Namen "test"
-                    System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s%n",
+                    System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s|%-8s%n",
                             modul.getModulName(),
                             modul.getBeschreibung(),
                             modul.getCreditpoints(),
                             modul.getNote(),
-                            modul.getSemester());
+                            modul.getSemester(),
+                            modul.getVersuch());
 
                     // Da das gewünschte Modul gefunden wurde, kann die Schleife verlassen werden
+                    art = "Pflicht";
+                    fund = true;
                     break;
                 }
+
             }
         }
+        if (!fund){
+            System.out.println("Kein Modul mit dem Namen " + modulname + " gefunden!");
+        }
+        return art;
     }
 
     public static void clearScreen() {
@@ -268,5 +289,9 @@ public class Main {
             // Handle exceptions here
             e.printStackTrace();
         }
+    }
+
+    public void abschlussDetails (Student student, String modul){
+
     }
 }
