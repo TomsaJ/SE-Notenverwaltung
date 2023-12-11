@@ -99,16 +99,11 @@ public class Main {
 
             System.out.println("-----------------------------------------------------------------------------------------------------------");
             System.out.println("\nAbschluss");
-            Abschluss abschluss = student.getAbschluss();
-            if (abschluss == null) {
-                System.out.println("Kein Abschluss vorhanden");
-            } else {
-                if (abschluss.getThema() == null) {
-                    System.out.println("Thema nicht festgelegt");
-                } else {
-                    System.out.println(abschluss.getThema());
-                }
-            }
+
+            student.getAbschluss().forEach(abschluss -> {
+            System.out.println(abschluss.getThema()+" "+ abschluss.getNoteArbeit()+ " "+ abschluss.getNoteArbeit());
+            });
+
 
             System.out.println("-----------------------------------------------------------------------------------------------------------");
 

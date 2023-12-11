@@ -3,6 +3,7 @@ package de.fh.swf.se.s2;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class Student {
 	private String studiengang;
 	private List<Pflichtmodul> pflichtmodule;
 	private List<Wahlmodul> wahlmodule;
-	private Abschluss abschluss;
+	private List<Abschluss> abschluss;
 
 	// Konstruktor für Student
 	public Student(String vorname, String nachname, long matrikelnummer , String studiengang) {
@@ -29,6 +30,7 @@ public class Student {
 		this.studiengang = studiengang;
 		this.pflichtmodule = new ArrayList<>();
 		this.wahlmodule = new ArrayList<>();
+		this.abschluss = new ArrayList<>();
 		modul();
 
 	}
@@ -91,9 +93,57 @@ public class Student {
 					System.out.println("Warning: Insufficient fields in line");
 				}
 			}
+
 		} catch (IOException e) {
             throw new RuntimeException(e);
         }
+		try{
+			int i = 0;
+			var filePath = "/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Abschluss.csv";
+			var file = Paths.get(filePath);
+
+			if (!Files.exists(file)) {
+				System.out.println("File not found: " + filePath);
+				return;
+			}
+
+			var fileContent = Files.readString(file, Charset.forName("UTF-8"));
+
+			// Trennen Sie die Zeilen der CSV-Datei
+			List<String> lines = Arrays.asList(fileContent.split("\n"));
+
+			// Iterieren Sie durch jede Zeile und verarbeiten Sie die Daten
+			for (String line : lines) {
+				// Trennen Sie die einzelnen Felder durch das Trennzeichen ";"
+				String[] fields = line.split(";");
+
+				// Validieren Sie die Länge des Arrays
+				if (fields.length >= 5) {
+					// Extrahieren Sie die Daten aus den Feldern
+					String student = fields[0];
+					String thema = fields[1];
+					double gArbeit = Double.parseDouble(fields[2]);
+					double nArbeit = Double.parseDouble(fields[3]);
+					double gKollo = Double.parseDouble(fields[4]);
+					double nKollo = Double.parseDouble(fields[5]);
+					int versuch = Integer.parseInt(fields[6]);
+
+
+					// Rufen Sie Ihre Methode auf, um die Daten zu verarbeiten
+					if (Objects.equals(student, nachname) && i == 0) {
+							Abschluss abschluss = new Abschluss(thema, gArbeit, gKollo);
+							addAbschluss(abschluss);
+							abschluss.addAVersuch(versuch);
+							abschluss.addNoteArbeit(nArbeit,"l");
+							abschluss.addNoteKolloquium(nKollo,"l");
+							i = 1;
+						}
+					}
+				}
+
+		}catch (IOException e){
+						throw new RuntimeException(e);
+		}
     }
 
 	/**
@@ -324,14 +374,25 @@ public class Student {
 		try {
 			//first method
 			var writer = new PrintWriter(
-					"/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Module.csv", "UTF-8");
+					"/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Module.csv", StandardCharsets.UTF_8);
 			getPflichtmodule().forEach(modul -> {
 				writer.println(nachname + ";" + "p;" +   modul.getModulName() + ";" + modul.getCreditpoints()+ ";" + modul.getBeschreibung()  + ";" + modul.getSemester()+";" + modul.getNote() + ";" + modul.getVersuch()+";");
 			});
 			getWahlmodule().forEach(modul -> {
 				writer.println(nachname + ";" + "w;" +   modul.getModulName() + ";" + modul.getCreditpoints()+ ";" + modul.getBeschreibung()  + ";" + modul.getSemester()+";" + modul.getNote() + ";" + modul.getVersuch()+";");
 			});
+
 			writer.close();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+			try {
+			var writerA = new PrintWriter(
+					"/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Abschluss.csv", StandardCharsets.UTF_8);
+				getAbschluss().forEach(modul -> {
+			writerA.println(nachname + ";"  +   modul.getThema() + ";" + modul.getGewichtungArbeit()+ ";" + modul.getNoteArbeit()  + ";" + modul.getGewichtungKolloquium()+";" + modul.getNoteKolloquium() + ";" + modul.getVersuch()+";");
+			});
+			writerA.close();
 		} catch (IOException e) {
 			System.out.println(e);
 		}
@@ -339,22 +400,25 @@ public class Student {
 
 	/**
 	 * 
-	 * @param abschluss
+	 * @param abschluss1
 	 */
-	public void addAbschluss(Abschluss abschluss) {
-		this.abschluss = abschluss;
+	public void addAbschluss(Abschluss abschluss1) {
+		if (abschluss1 != null) {
+			abschluss.add(abschluss1);
+
+		}
 	}
 
 	public void setAbschluss(Abschluss abschluss) {
-		this.abschluss = abschluss;
+
 	}
 
 	public void addNoteToAbschlussA(double noteArbeit) {
-		abschluss.addNoteArbeit(noteArbeit);
+
 	}
 
 	public void addNoteToAbschlussK(double noteKolloquium) {
-		abschluss.addNoteKolloquium(noteKolloquium);
+		//abschluss.addNoteKolloquium(noteKolloquium,"s");
 	}
 
 	// Getter-Methoden für Matrikelnummer, Vorname, Nachname und Studiengang
@@ -383,7 +447,7 @@ public class Student {
 		return wahlmodule;
 	}
 
-	public Abschluss getAbschluss() {
+	public List<Abschluss> getAbschluss() {
 		return abschluss;
 	}
 
