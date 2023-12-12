@@ -6,10 +6,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Student {
 
@@ -90,7 +87,8 @@ public class Student {
 							}
 						}
 					}
-
+					Collections.sort(wahlmodule, Comparator.comparing(Wahlmodul::getSemester));
+					Collections.sort(pflichtmodule, Comparator.comparing(Pflichtmodul::getSemester));
 				} else {
 					System.out.println("Warning: Insufficient fields in line");
 				}
@@ -340,17 +338,26 @@ public class Student {
 	 * @param pflichtmodul
 	 */
 	public void addPflichtmodul(Pflichtmodul pflichtmodul) {
-		if (!isModulNameInList(pflichtmodul.getModulName())) {
+		if (!isModulNameInListP(pflichtmodul.getModulName())) {
 			pflichtmodule.add(pflichtmodul);
 		} else {
 			System.out.println("Ein Pflichtmodul mit dem gleichen Namen existiert bereits.");
 			// Hier könntest du weitere Fehlerbehandlung hinzufügen
 		}
+		Collections.sort(pflichtmodule, Comparator.comparing(Pflichtmodul::getSemester));
 	}
 
-	public boolean isModulNameInList(String modulName) {
+	public boolean isModulNameInListP(String modulName) {
 		for (Pflichtmodul pm : pflichtmodule) {
 			if (pm.getModulName().equals(modulName)) {
+				return true; // Pflichtmodul mit dem gegebenen Namen gefunden
+			}
+		}
+		return false; // Pflichtmodul mit dem gegebenen Namen nicht gefunden
+	}
+	public boolean isModulNameInListW(String modulName) {
+		for (Wahlmodul wm : wahlmodule) {
+			if (wm.getModulName().equals(modulName)) {
 				return true; // Pflichtmodul mit dem gegebenen Namen gefunden
 			}
 		}
@@ -364,7 +371,13 @@ public class Student {
 	 * @param wahlmodul
 	 */
 	public void addWahlmodul(Wahlmodul wahlmodul) {
+		if (!isModulNameInListW(wahlmodul.getModulName())) {
 		wahlmodule.add(wahlmodul);
+		} else {
+		System.out.println("Ein Pflichtmodul mit dem gleichen Namen existiert bereits.");
+		// Hier könntest du weitere Fehlerbehandlung hinzufügen
+	}
+		Collections.sort(wahlmodule, Comparator.comparing(Wahlmodul::getSemester));
 	}
 
 
@@ -456,6 +469,8 @@ public class Student {
 		}
 
 	}
+
+	//public void
 
 	// Getter-Methoden für Matrikelnummer, Vorname, Nachname und Studiengang
 	public long getMatrikelnummer() {

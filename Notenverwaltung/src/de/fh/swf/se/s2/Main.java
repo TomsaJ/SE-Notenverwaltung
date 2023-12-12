@@ -176,7 +176,6 @@ public class Main {
                     } while (!input.equals("Ja"));
                     Wahlmodul wm = new Wahlmodul(name, credit, beschreibung, semester);
                     student.addWahlmodul(wm);
-                    System.out.println("Sie haben Option 1 ausgewählt.");
                     // Hier können Sie den Code für Option 1 hinzufügen
                     // Hier können Sie den Code für Option 3 hinzufügen
                     break;

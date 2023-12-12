@@ -2,5 +2,7 @@ Mustermann;p;Test;2;Test;1;5.0;3;
 Mustermann;p;C++1;6;Code;1;1.3;1;
 Mustermann;p;C++2;6;Code;2;0.0;0;
 Mustermann;p;Java 1;6;Code;3;0.0;0;
-Mustermann;w;Framework;6;Webseite;5;0.0;0;
 Mustermann;w;Mathematik 1;6;Mathe 1;1;0.0;0;
+Mustermann;w;Test2;2;2;1;0.0;0;
+Mustermann;w;Test;2;2;2;0.0;0;
+Mustermann;w;Framework;6;Webseite;5;0.0;0;
