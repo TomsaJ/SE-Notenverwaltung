@@ -160,7 +160,6 @@ public class Main {
                     System.out.println("Sie haben Option 1 ausgewählt.");
                     // Hier können Sie den Code für Option 1 hinzufügen
                     break;
-
                 case "2":
                     do {
                         System.out.println("Modulname");
