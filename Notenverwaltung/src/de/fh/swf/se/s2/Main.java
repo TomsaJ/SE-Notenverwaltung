@@ -18,49 +18,51 @@ public class Main {
         System.out.println("logg In(Nachname):");
 
         String lnachname = scanner.nextLine();
-            try {
-                var filePath = "/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Student.csv";
-                var file = Paths.get(filePath);
+        try {
+            var filePath = "/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Student.csv";
+            var file = Paths.get(filePath);
 
-                if (!Files.exists(file)) {
-                    System.out.println("File not found: " + filePath);
-                    return;
-                }
-
-                var fileContent = Files.readString(file, Charset.forName("UTF-8"));
-
-                // Trennen Sie die Zeilen der CSV-Datei
-                List<String> lines = Arrays.asList(fileContent.split("\n"));
-
-                // Iterieren Sie durch jede Zeile und verarbeiten Sie die Daten
-                for (String line : lines) {
-                    // Trennen Sie die einzelnen Felder durch das Trennzeichen ";"
-                    String[] fields = line.split(";");
-
-                    // Validieren Sie die Länge des Arrays
-                    if (fields.length >= 4) {
-                        // Extrahieren Sie die Daten aus den Feldern
-                        String vorname = fields[0];
-                        String nachname = fields[1];
-                        int matrikelnummer = Integer.parseInt(fields[2]);
-                        String studiengang = fields[3];
-
-
-                        // Rufen Sie Ihre Methode auf, um die Daten zu verarbeiten
-                        if(Objects.equals(nachname, lnachname)) {
-                            student = new Student (vorname,nachname,matrikelnummer,studiengang);
-                        }
-
-                    } else {
-                        System.out.println("Warning: Insufficient fields in line");
-                    }
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if (!Files.exists(file)) {
+                System.out.println("File not found: " + filePath);
+                return;
             }
+
+            var fileContent = Files.readString(file, Charset.forName("UTF-8"));
+
+            // Trennen Sie die Zeilen der CSV-Datei
+            List<String> lines = Arrays.asList(fileContent.split("\n"));
+
+            // Iterieren Sie durch jede Zeile und verarbeiten Sie die Daten
+            for (String line : lines) {
+                // Trennen Sie die einzelnen Felder durch das Trennzeichen ";"
+                String[] fields = line.split(";");
+
+                // Validieren Sie die Länge des Arrays
+                if (fields.length >= 4) {
+                    // Extrahieren Sie die Daten aus den Feldern
+                    String vorname = fields[0];
+                    String nachname = fields[1];
+                    int matrikelnummer = Integer.parseInt(fields[2]);
+                    String studiengang = fields[3];
+
+
+                    // Rufen Sie Ihre Methode auf, um die Daten zu verarbeiten
+                    if(Objects.equals(nachname, lnachname)) {
+                        student = new Student (vorname,nachname,matrikelnummer,studiengang);
+                    }
+
+                } else {
+                    System.out.println("Warning: Insufficient fields in line");
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         clearScreen();
         menu(student);
     }
+
+
 
     public static void menu(Student student) {
         Scanner scanner = new Scanner(System.in);
@@ -123,7 +125,8 @@ public class Main {
             System.out.println("\n1. Neues Pflichtmodul hinzufügen");
             System.out.println("2. Neues Wahlmodul hinzufügen");
             System.out.println("3. Modul Detail");
-            System.out.println("4. Abschluss");
+            System.out.println("4. Offene Fächer");
+            System.out.println("6. Abschluss");
 
             System.out.println("9. Exit");
 
@@ -195,6 +198,34 @@ public class Main {
                     // Hier können Sie den Code für Option 2 hinzufügen
                     break;
                 case "4":
+                    do {
+                        System.out.println("\nOffene Fächer:");
+                        System.out.printf("%-20s|%-40s|%-15s|%-15s%n", "Modulname", "Beschreibung", "Creditpoints", "Semester");
+                        System.out.println("-----------------------------------------------------------------------------------------------------------");
+                        student.getPflichtmodule().forEach(modul -> {
+                            if (modul.getNote() == 0.0) {
+                                System.out.printf("%-20s|%-40s|%-15s|%-15s%n",
+                                        modul.getModulName(),
+                                        modul.getBeschreibung(),
+                                        modul.getCreditpoints(),
+                                        modul.getSemester());
+                            }
+                        });
+                        student.getWahlmodule().forEach(modul -> {
+                            if (modul.getNote() == 0.0) {
+                                System.out.printf("%-20s|%-40s|%-15s|%-15s%n",
+                                        modul.getModulName(),
+                                        modul.getBeschreibung(),
+                                        modul.getCreditpoints(),
+                                        modul.getSemester());
+                            }
+                        });
+                        System.out.println("\n1. Verlassen");
+                        // Benutzereingabe lesen
+                        input = scanner.nextLine();
+                    }while (!Objects.equals(input, "1"));
+                    break;
+                case "6":
 
                     System.out.println("Thema:");
                     String thema = scanner.nextLine();
@@ -214,7 +245,7 @@ public class Main {
 
             clearScreen();
 
-        } while (!input.equals("9")); // Die Schleife läuft, bis der Benutzer "4" für "Exit" eingibt
+        } while (!input.equals("9")); // Die Schleife läuft, bis der Benutzer "9" für "Exit" eingibt
 
         // Aufräumarbeiten oder Abschlusscode können hier hinzugefügt werden
         System.out.println("Daten gespeichert");

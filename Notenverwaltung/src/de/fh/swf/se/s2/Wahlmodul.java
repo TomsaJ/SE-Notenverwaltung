@@ -59,6 +59,11 @@ public class Wahlmodul {
 
 			}
 		}
+		if(this.wVersuch == 3) {
+			System.out.println("Note wurde NICHT eingetragen. Grund: Maximale Anzahl von Versuchen erreicht");
+		}else if(this.wNote != 0.0){
+			System.out.println("Note wurde NICHT eingetragen. Grund: Note schon vorhanden");
+		}
 		return false;
 	}
 

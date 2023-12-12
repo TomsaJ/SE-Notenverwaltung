@@ -176,6 +176,7 @@ public class Student {
 	public  void addNoteToPflichmodul(String pflichtmodul, double pNote) {
 		Pflichtmodul pm1 = findePflichtmodul(pflichtmodul);
 
+
 		if (pm1 != null) {
 			pm1.addPNote(pNote,"n");
 		} else {
