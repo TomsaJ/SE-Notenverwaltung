@@ -43,25 +43,32 @@ public class Abschluss {
 	 * @param noteArbeit
 	 */
 	public boolean addNoteArbeit(double noteArbeit,String s) {
-		int i = 0;
+
 		if((this.aNoteArbeit == 0.0 && this.aVersuch != 2) || (this.aNoteArbeit == 5.0 && this.aVersuch != 2)) {
 			if (noteArbeit >= 1.0 && noteArbeit <= 5.0) {
-				while (mNote[i] != aNoteArbeit) {
-					if (i > 10) {
-						System.out.println("Keine gültige Note");
-						return false;
+				for (int i = 0; i<11;i++){
+					if (mNote[i] == noteArbeit) {
+						this.aNoteArbeit = noteArbeit;
+						if(Objects.equals(s, "n")) {
+							this.aVersuch = this.aVersuch + 1;
+						}
+						System.out.println("Note für Arbeit eingetragen");
+						return true;
 					}
-					i++;
 				}
-				if (mNote[i] == noteArbeit) {
-					this.aNoteArbeit = noteArbeit;
-					if(Objects.equals(s, "n")) {
-						this.aVersuch = this.aVersuch + 1;
-					}
-					return true;
+				System.out.println("Keine gültige Note");
+				try {
+					// Warte für 2 Sekunden (2000 Millisekunden)
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// Handle die Interrupted-Exception, falls sie auftritt
+					e.printStackTrace();
 				}
-
+				return false;
 			}
+
+
+
 		}
 		return false;
 	}
@@ -71,19 +78,24 @@ public class Abschluss {
 	 * @param noteKolloquium
 	 */
 	public boolean addNoteKolloquium(double noteKolloquium, String s) {
-		int i = 0;
 		if((this.aNoteKolloquium == 0.0 && this.aVersuch != 2) || (this.aNoteKolloquium == 5.0 && this.aVersuch != 2)) {
 			if (noteKolloquium >= 1.0 && noteKolloquium <= 5.0) {
-				while (mNote[i] != aNoteArbeit) {
-					if (i > 10) {
-						System.out.println("Keine gültige Note");
-						return false;
+				for (int i = 0; i<11;i++){
+					if (mNote[i] == noteKolloquium) {
+						this.aNoteKolloquium = noteKolloquium;
+						if(Objects.equals(s, "n")) {
+							this.aVersuch = this.aVersuch + 1;
+						}
+						System.out.println("Note für Kolloquium eingetragen");
+						try {
+							// Warte für 2 Sekunden (2000 Millisekunden)
+							Thread.sleep(2000);
+						} catch (InterruptedException e) {
+							// Handle die Interrupted-Exception, falls sie auftritt
+							e.printStackTrace();
+						}
+						return true;
 					}
-					i++;
-				}
-				if (mNote[i] == noteKolloquium) {
-					this.aNoteKolloquium = noteKolloquium;
-					return true;
 				}
 
 			}

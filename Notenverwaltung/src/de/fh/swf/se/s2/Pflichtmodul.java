@@ -62,8 +62,22 @@ public class Pflichtmodul {
 		}
 		if(this.pVersuch == 3) {
 			System.out.println("Note wurde NICHT eingetragen. Grund: Maximale Anzahl von Versuchen erreicht");
+			try {
+				// Warte für 2 Sekunden (2000 Millisekunden)
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// Handle die Interrupted-Exception, falls sie auftritt
+				e.printStackTrace();
+			}
 		}else if(this.pNote != 0.0){
 			System.out.println("Note wurde NICHT eingetragen. Grund: Note schon vorhanden");
+			try {
+				// Warte für 2 Sekunden (2000 Millisekunden)
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// Handle die Interrupted-Exception, falls sie auftritt
+				e.printStackTrace();
+			}
 		}
         return false;
     }

@@ -52,6 +52,7 @@ public class Wahlmodul {
 				if (mNote[i] == wNote) {
 					this.wNote = wNote;
 					if(Objects.equals(s, "n")) {
+
 						this.wVersuch = this.wVersuch + 1;
 					}
 					return true;
@@ -61,8 +62,22 @@ public class Wahlmodul {
 		}
 		if(this.wVersuch == 3) {
 			System.out.println("Note wurde NICHT eingetragen. Grund: Maximale Anzahl von Versuchen erreicht");
+			try {
+				// Warte für 2 Sekunden (2000 Millisekunden)
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// Handle die Interrupted-Exception, falls sie auftritt
+				e.printStackTrace();
+			}
 		}else if(this.wNote != 0.0){
 			System.out.println("Note wurde NICHT eingetragen. Grund: Note schon vorhanden");
+			try {
+				// Warte für 2 Sekunden (2000 Millisekunden)
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// Handle die Interrupted-Exception, falls sie auftritt
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}

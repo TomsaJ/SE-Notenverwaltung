@@ -44,11 +44,12 @@ public class Main {
                     String nachname = fields[1];
                     int matrikelnummer = Integer.parseInt(fields[2]);
                     String studiengang = fields[3];
+                    int creditpoints = Integer.parseInt(fields[4]);
 
 
                     // Rufen Sie Ihre Methode auf, um die Daten zu verarbeiten
                     if(Objects.equals(nachname, lnachname)) {
-                        student = new Student (vorname,nachname,matrikelnummer,studiengang);
+                        student = new Student (vorname,nachname,matrikelnummer,studiengang,creditpoints);
                     }
 
                 } else {
@@ -75,16 +76,18 @@ public class Main {
         double note;
 
         do {
-            System.out.printf("%-50s|%-20s|%-15s%n",
+            System.out.printf("%-50s|%-20s|%-15s|%-15s%n",
                     "Student",
                     "Matrikelnummer",
-                    "Studiengang"
+                    "Studiengang",
+                    "Gesamte Creditpoints"
             );
-            System.out.printf("%-25s%-25s|%-20s|%-15s%n",
+            System.out.printf("%-25s%-25s|%-20s|%-15s|%-15s%n",
                     student.getVorname(), // String
                     student.getNachname(), // String
                     student.getMatrikelnummer(), // int
-                    student.getStudiengang() // String
+                    student.getStudiengang(), // String
+                    student.getCreditpoints()
             );
 
             System.out.println("\nPflichtmodule und Noten:");
@@ -226,15 +229,7 @@ public class Main {
                     }while (!Objects.equals(input, "1"));
                     break;
                 case "6":
-
-                    System.out.println("Thema:");
-                    String thema = scanner.nextLine();
-                    System.out.println("Gewichtung Arbeit");
-                    double arbeit = Double.parseDouble(scanner.nextLine());
-                    System.out.println("Gewichtung Kolloquium");
-                    double kolloquium = Double.parseDouble(scanner.nextLine());
-                    Abschluss abschluss1 = new Abschluss(thema, arbeit, kolloquium);
-                    student.addAbschluss(abschluss1);
+                    abschluss(student);
                     break;
                 case "9":
                     student.save();
@@ -251,6 +246,99 @@ public class Main {
         System.out.println("Daten gespeichert");
         System.out.println("Die Anwendung wird beendet.");
         scanner.close();
+    }
+
+    private static void abschluss(Student student) {
+        String input;
+        do {
+            clearScreen();
+            Scanner scanner = new Scanner(System.in);
+
+            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            System.out.println("\nAbschluss:");
+            System.out.printf("%-20s|%-40s|%-20s%n", "Thema", "Note Arbeit", "Note Kolloquium");
+            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            student.getAbschluss().forEach(abschluss -> {
+                System.out.printf("%-20s|%-40s|%-20s%n",
+                        abschluss.getThema(),
+                        abschluss.getNoteArbeit(),
+                        abschluss.getNoteArbeit());
+            });
+            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            System.out.println("\n1. Abschluss erstellen");
+            System.out.println("2. Noten eintragen (Arbeit/Kolloquium)");
+            System.out.println("9. Exit");
+            System.out.print("Bitte wählen Sie eine Option: ");
+            input = scanner.nextLine();
+            switch(input){
+                case "1":
+                    if(student.getAbschluss().isEmpty())
+                    {
+                        System.out.println("Thema:");
+                        String thema = scanner.nextLine();
+                        System.out.println("Gewichtung Arbeit");
+                        double arbeit = Double.parseDouble(scanner.nextLine());
+                        System.out.println("Gewichtung Kolloquium");
+                        double kolloquium = Double.parseDouble(scanner.nextLine());
+                        Abschluss abschluss1 = new Abschluss(thema, arbeit, kolloquium);
+                        student.addAbschluss(abschluss1);
+                    }else{
+                        System.out.println("Ein Abschluss ist schon vorhanden");
+                    }
+                    break;
+                case "2":
+                    double[] mNote = {1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0 ,3.3, 3.7, 4.0,5.0};
+                    boolean arbeit = false;
+                    boolean kollo = false ;
+                    if(student.getAbschluss()!=null) {
+                        System.out.println("Note Arbeit:");
+                        double noteA = Double.parseDouble(scanner.nextLine());
+
+                        System.out.println("Kolloquium Arbeit:");
+                        double noteK = Double.parseDouble(scanner.nextLine());
+
+                        if ((student.getNoteA() == 0.0 && student.getVersuchA() != 2) || (student.getNoteA() == 5.0 && student.getVersuchA() != 2) || (student.getNoteK() == 0.0 && student.getVersuchA() != 2) || (student.getNoteK() == 5.0 && student.getVersuchA() != 2)) {
+                            if (noteA >= 1.0 && noteA <= 5.0 && noteK >= 1.0 && noteK <= 5.0) {
+                                for (int i = 0; i < 11; i++) {
+                                    if (mNote[i] == noteA) {
+                                        arbeit = true;
+                                    }
+                                    if (mNote[i] == noteK) {
+                                     kollo = true;
+                                    }
+                                }
+                                if(arbeit && kollo)
+                                {
+                                    student.addNoteToAbschlussA(noteA);
+                                    student.addNoteToAbschlussK(noteK);
+                                }else{
+                                    System.out.println("Einer der Note passt nicht dem Noten Schema");
+                                    try {
+                                        // Warte für 2 Sekunden (2000 Millisekunden)
+                                        Thread.sleep(2000);
+                                    } catch (InterruptedException e) {
+                                        // Handle die Interrupted-Exception, falls sie auftritt
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                                }
+
+                            }
+                        } else {
+                            System.out.println("Kein Abschluss vorhanden");
+                        }
+                    }
+                case "3":
+                    if(student.getAbschluss()!=null)
+                    {
+
+                    }else{
+                        System.out.println("Kein Abschluss vorhanden");
+                    }
+            }
+
+        } while (!input.equals("9"));
+
     }
 
     public static String einzelmodul(String modulname, Student student) {

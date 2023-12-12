@@ -18,12 +18,13 @@ public class Student {
 	private String vorname;
 	private String nachname;
 	private String studiengang;
+	private int creditpoints;
 	private List<Pflichtmodul> pflichtmodule;
 	private List<Wahlmodul> wahlmodule;
 	private List<Abschluss> abschluss;
 
 	// Konstruktor für Student
-	public Student(String vorname, String nachname, long matrikelnummer , String studiengang) {
+	public Student(String vorname, String nachname, long matrikelnummer , String studiengang, int creditpoints) {
 		this.vorname = vorname;
 		this.nachname = nachname;
 		this.matrikelnummer = matrikelnummer;
@@ -31,6 +32,7 @@ public class Student {
 		this.pflichtmodule = new ArrayList<>();
 		this.wahlmodule = new ArrayList<>();
 		this.abschluss = new ArrayList<>();
+		this.creditpoints = creditpoints;
 		modul();
 
 	}
@@ -179,6 +181,8 @@ public class Student {
 
 		if (pm1 != null) {
 			pm1.addPNote(pNote,"n");
+			int pmCP = pm1.getCreditpoints();
+			creditpoints = creditpoints + pmCP;
 		} else {
 			System.out.println("Pflichtmodul nicht gefunden!");
 			// Hier könntest du weitere Fehlerbehandlung hinzufügen
@@ -217,6 +221,8 @@ public class Student {
 
 		if (wm != null) {
 			wm.addWNote(wNote,"n");
+			int wmCP = wm.getCreditpoints();
+			creditpoints = creditpoints + wmCP;
 		} else {
 			System.out.println("Pflichtmodul nicht gefunden!");
 			// Hier könntest du weitere Fehlerbehandlung hinzufügen
@@ -397,6 +403,15 @@ public class Student {
 		} catch (IOException e) {
 			System.out.println(e);
 		}
+		try {
+			//first method
+			var writer = new PrintWriter(
+					"/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Student.csv", StandardCharsets.UTF_8);
+				writer.println(getVorname()+";"+getNachname()+";"+getMatrikelnummer()+";"+getStudiengang()+";"+getCreditpoints());
+			writer.close();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
 	}
 
 	/**
@@ -414,11 +429,32 @@ public class Student {
 	}
 
 	public void addNoteToAbschlussA(double noteArbeit) {
+		Abschluss ab = findeAbschluss();
+		if (ab != null) {
+			ab.addNoteArbeit(noteArbeit, "n");
+		}
 
 	}
 
+	private  Abschluss findeAbschluss() {
+		for (Abschluss abschluss : abschluss) {
+			return abschluss;
+		}
+		return null;
+	}
+
 	public void addNoteToAbschlussK(double noteKolloquium) {
-		//abschluss.addNoteKolloquium(noteKolloquium,"s");
+		Abschluss ab = findeAbschluss();
+		if (ab != null) {
+			ab.addNoteKolloquium(noteKolloquium,"n");
+			double noteA = ab.getNoteArbeit();
+			double noteK = ab.getNoteKolloquium();
+			if (noteA > 0.0 && noteA < 5.0 && noteK > 0.0 && noteK < 5.0)
+			{
+				creditpoints = 180;
+			}
+		}
+
 	}
 
 	// Getter-Methoden für Matrikelnummer, Vorname, Nachname und Studiengang
@@ -437,6 +473,9 @@ public class Student {
 	public String getStudiengang() {
 		return studiengang;
 	}
+	public int getCreditpoints() {
+		return creditpoints;
+	}
 
 	// Getter-Methoden für Pflicht- und Wahlmodule sowie Abschluss
 	public List<Pflichtmodul> getPflichtmodule() {
@@ -449,6 +488,22 @@ public class Student {
 
 	public List<Abschluss> getAbschluss() {
 		return abschluss;
+	}
+
+	public int getVersuchA()
+	{
+		Abschluss ab = findeAbschluss();
+		return ab.getVersuch();
+	}
+
+	public double getNoteA(){
+		Abschluss ab = findeAbschluss();
+		return ab.getNoteArbeit();
+	}
+
+	public double getNoteK(){
+		Abschluss ab = findeAbschluss();
+		return ab.getNoteKolloquium();
 	}
 
 
