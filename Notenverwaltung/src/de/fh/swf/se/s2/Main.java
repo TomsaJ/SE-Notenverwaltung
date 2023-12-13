@@ -319,12 +319,12 @@ public class Main {
             clearScreen();
             Scanner scanner = new Scanner(System.in);
 
-            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            System.out.println("---------------------------------------------------------------------------------------------------------------------");
             System.out.println("\nAbschluss:");
-            System.out.printf("|%-20s|%-20s|%-20s|%-20s|%-20s%n", "Thema", "Note Arbeit","Gewichtung Arbeit", "Note Kolloquium", "Gewichtung Kolloquium");
-            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            System.out.printf("|%-20s|%-20s|%-20s|%-20s|%-20s|%-10s%n", "Thema", "Note Arbeit","Gewichtung Arbeit", "Note Kolloquium", "Gewichtung Kolloquium", "Versuch");
+            System.out.println("---------------------------------------------------------------------------------------------------------------------");
             student.getAbschluss().forEach(abschluss -> {
-                System.out.printf("|%-20s|%-20s|%-20s|%-20s|%-20s%n",
+                System.out.printf("|%-20s|%-20s|%-20s|%-20s|%-20s|%-10s%n",
                         abschluss.getThema(),
                         abschluss.getNoteArbeit(),
                         abschluss.getGewichtungArbeit(),
@@ -332,7 +332,7 @@ public class Main {
                 abschluss.getGewichtungKolloquium(),
                 abschluss.getVersuch());
             });
-            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            System.out.println("---------------------------------------------------------------------------------------------------------------------");
             System.out.println("\n1. Abschluss erstellen");
             System.out.println("2. Noten eintragen (Arbeit/Kolloquium)");
             System.out.println("3. Abschluss bearbeiten");
