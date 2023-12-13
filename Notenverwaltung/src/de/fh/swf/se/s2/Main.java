@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
+/**
+ * @author TomsaJ
+ * @version 1.8.1
+ */
 
 public class Main {
     public static void main(String[] args) {
