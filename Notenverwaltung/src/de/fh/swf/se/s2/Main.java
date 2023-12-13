@@ -91,23 +91,48 @@ public class Main {
             );
 
             System.out.println("\nPflichtmodule und Noten:");
-            System.out.printf("%-20s|%-40s|%-15s%n", "Modulname", "Beschreibung", "Semester");
+            System.out.printf("%-20s|%-40s|%-15s|%-15s%n", "Modulname", "Beschreibung", "Semester", "Status");
             System.out.println("-----------------------------------------------------------------------------------------------------------");
             student.getPflichtmodule().forEach(modul -> {
-                System.out.printf("%-20s|%-40s|%-15s%n",
+                String status; // Variable to store the status
+
+                if (modul.getNote() == 0.0 || (modul.getNote() == 5.0 && modul.getVersuch() > 3)) {
+                    status = "Offen";
+                } else if (modul.getNote() != 0.0 && modul.getNote() != 5.0) {
+                    status = "bestanden";
+                } else {
+                    // Set a default value or handle other cases
+                    status = "Entgültig nicht bestanden";
+                }
+                System.out.printf("%-20s|%-40s|%-15s|%-15s%n",
                         modul.getModulName(),
                         modul.getBeschreibung(),
-                        modul.getSemester());
+                        modul.getSemester(),
+                        status);
             });
+            System.out.println("Durchschnitt Pflichtmodule:" + student.berechnePflichtmodulDurchschnitt());
             System.out.println("\nWahlmodule und Noten:");
-            System.out.printf("%-20s|%-40s|%-15s%n", "Modulname", "Beschreibung", "Semester");
+            System.out.printf("%-20s|%-40s|%-15s|%-15s%n", "Modulname", "Beschreibung", "Semester", "Status");
             System.out.println("-----------------------------------------------------------------------------------------------------------");
             student.getWahlmodule().forEach(modul -> {
-                System.out.printf("%-20s|%-40s|%-15s%n",
+                String status; // Variable to store the status
+
+                if (modul.getNote() == 0.0 || (modul.getNote() == 5.0 && modul.getVersuch() < 3)) {
+                    status = "Offen";
+                } else if (modul.getNote() != 0.0 && modul.getNote() != 5.0) {
+                    status = "bestanden";
+                } else {
+                    // Set a default value or handle other cases
+                    status = "Entgültig nicht bestanden";
+                }
+                System.out.printf("%-20s|%-40s|%-15s|%-15s%n",
                         modul.getModulName(),
                         modul.getBeschreibung(),
-                        modul.getSemester());
+                        modul.getSemester(),
+                status);
             });
+
+            System.out.println("\nDurchschnitt Wahlmodule:" + student.berechneWahlModulDurchschnitt());
 
             System.out.println("-----------------------------------------------------------------------------------------------------------");
             System.out.println("\nAbschluss:");
@@ -148,6 +173,11 @@ public class Main {
                         name = scanner.nextLine();
                         System.out.println("Creditpoints");
                         credit = Integer.parseInt(scanner.nextLine());
+                        while (credit <= 0 && credit >= 30)
+                        {
+                            System.out.println("Creditpoints");
+                            credit = Integer.parseInt(scanner.nextLine());
+                        }
                         System.out.println("Beschreibung");
                         beschreibung = scanner.nextLine();
                         System.out.println("Semester");
@@ -166,6 +196,11 @@ public class Main {
                         name = scanner.nextLine();
                         System.out.println("Creditpoints");
                         credit = Integer.parseInt(scanner.nextLine());
+                        while (credit <= 0 && credit >= 30)
+                        {
+                            System.out.println("Creditpoints");
+                            credit = Integer.parseInt(scanner.nextLine());
+                        }
                         System.out.println("Beschreibung");
                         beschreibung = scanner.nextLine();
                         System.out.println("Semester");
@@ -179,6 +214,7 @@ public class Main {
                     // Hier können Sie den Code für Option 3 hinzufügen
                     break;
                 case "3":
+                    clearScreen();
                     System.out.println("Modul eingeben");
                     modulname = scanner.nextLine();
                     clearScreen();
@@ -187,6 +223,7 @@ public class Main {
                     System.out.printf("\n%-50s%-50s%-50s%n", "1. Noten für "+ modulname +  " eintragen", "2. Bearbeiten", "3. Verlassen");
                     // Benutzereingabe lesen
                     input = scanner.nextLine();
+                        clearScreen();
                     if (input.equals("1")) {
                         System.out.println("\nNote für "+ modulname +" eingeben");
                         note = Double.parseDouble(scanner.nextLine());
@@ -196,6 +233,7 @@ public class Main {
                             student.addNoteToWahlModul(modulname, note);
                         }
                     }else if (input.equals("2")) {
+
                             System.out.println("\nBearbeitung von "+ modulname );
                             if(Objects.equals(art, "Pflicht")){
                                 einzelmodul(modulname,student);
@@ -281,12 +319,12 @@ public class Main {
             clearScreen();
             Scanner scanner = new Scanner(System.in);
 
-            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            System.out.println("---------------------------------------------------------------------------------------------------------------------");
             System.out.println("\nAbschluss:");
-            System.out.printf("%-20s|%-40s|%-20s%n", "Thema", "Note Arbeit", "Note Kolloquium");
-            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            System.out.printf("|%-20s|%-20s|%-20s|%-20s|%-20s|%-10s%n", "Thema", "Note Arbeit","Gewichtung Arbeit", "Note Kolloquium", "Gewichtung Kolloquium", "Versuch");
+            System.out.println("---------------------------------------------------------------------------------------------------------------------");
             student.getAbschluss().forEach(abschluss -> {
-                System.out.printf("%-20s|%-40s|%-20s|%-20s|%-20s|%-20s%n",
+                System.out.printf("|%-20s|%-20s|%-20s|%-20s|%-20s|%-10s%n",
                         abschluss.getThema(),
                         abschluss.getNoteArbeit(),
                         abschluss.getGewichtungArbeit(),
@@ -294,7 +332,7 @@ public class Main {
                 abschluss.getGewichtungKolloquium(),
                 abschluss.getVersuch());
             });
-            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            System.out.println("---------------------------------------------------------------------------------------------------------------------");
             System.out.println("\n1. Abschluss erstellen");
             System.out.println("2. Noten eintragen (Arbeit/Kolloquium)");
             System.out.println("3. Abschluss bearbeiten");
@@ -382,6 +420,7 @@ public class Main {
     }
 
     public static String einzelmodul(String modulname, Student student) {
+
         String art = null;
         boolean fund = false;
         System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s|%-8s%n", "Modulname", "Beschreibung", "Creditpoints", "Note", "Semester", "Versuch");
