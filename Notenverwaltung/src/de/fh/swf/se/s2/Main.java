@@ -15,7 +15,7 @@ public class Main {
         Student student = null;
         clearScreen();
         // Erstellen eines Studenten
-        System.out.println("logg In(Nachname):");
+        System.out.println("Nachname:");
 
         String lnachname = scanner.nextLine();
         try {
@@ -89,8 +89,8 @@ public class Main {
                     student.getStudiengang(), // String
                     student.getCreditpoints()
             );
-
-            System.out.println("\nPflichtmodule und Noten:");
+            System.out.println("\n-----------------------------------------------------------------------------------------------------------\n");
+            System.out.println("\nPflichtmodule und Noten:\n");
             System.out.printf("%-20s|%-40s|%-15s|%-15s%n", "Modulname", "Beschreibung", "Semester", "Status");
             System.out.println("-----------------------------------------------------------------------------------------------------------");
             student.getPflichtmodule().forEach(modul -> {
@@ -110,8 +110,10 @@ public class Main {
                         modul.getSemester(),
                         status);
             });
-            System.out.println("Durchschnitt Pflichtmodule:" + student.berechnePflichtmodulDurchschnitt());
-            System.out.println("\nWahlmodule und Noten:");
+            System.out.println("\nDurchschnitt Pflichtmodule: " + student.berechnePflichtmodulDurchschnitt());
+            System.out.println("\n-----------------------------------------------------------------------------------------------------------\n");
+
+            System.out.println("\nWahlmodule und Noten:\n");
             System.out.printf("%-20s|%-40s|%-15s|%-15s%n", "Modulname", "Beschreibung", "Semester", "Status");
             System.out.println("-----------------------------------------------------------------------------------------------------------");
             student.getWahlmodule().forEach(modul -> {
@@ -132,9 +134,8 @@ public class Main {
                 status);
             });
 
-            System.out.println("\nDurchschnitt Wahlmodule:" + student.berechneWahlModulDurchschnitt());
-
-            System.out.println("-----------------------------------------------------------------------------------------------------------");
+            System.out.println("\nDurchschnitt Wahlmodule: " + student.berechneWahlModulDurchschnitt());
+            System.out.println("\n-----------------------------------------------------------------------------------------------------------\n");
             System.out.println("\nAbschluss:");
             System.out.printf("%-20s|%-40s|%-20s%n","Thema","Note Arbeit","Note Kolloquium");
             System.out.println("-----------------------------------------------------------------------------------------------------------");
@@ -318,13 +319,11 @@ public class Main {
         do {
             clearScreen();
             Scanner scanner = new Scanner(System.in);
-
-            System.out.println("---------------------------------------------------------------------------------------------------------------------");
             System.out.println("\nAbschluss:");
-            System.out.printf("|%-20s|%-20s|%-20s|%-20s|%-20s|%-10s%n", "Thema", "Note Arbeit","Gewichtung Arbeit", "Note Kolloquium", "Gewichtung Kolloquium", "Versuch");
-            System.out.println("---------------------------------------------------------------------------------------------------------------------");
+            System.out.printf("|%-20s|%-20s|%-20s|%-20s|%-25s|%-15s%n", "Thema", "Note Arbeit","Gewichtung Arbeit", "Note Kolloquium", "Gewichtung Kolloquium", "Versuch");
+            System.out.println("------------------------------------------------------------------------------------------------------------------------");
             student.getAbschluss().forEach(abschluss -> {
-                System.out.printf("|%-20s|%-20s|%-20s|%-20s|%-20s|%-10s%n",
+                System.out.printf("\n|%-20s|%-20s|%-20s|%-20s|%-25s|%-15s%n",
                         abschluss.getThema(),
                         abschluss.getNoteArbeit(),
                         abschluss.getGewichtungArbeit(),
@@ -332,7 +331,7 @@ public class Main {
                 abschluss.getGewichtungKolloquium(),
                 abschluss.getVersuch());
             });
-            System.out.println("---------------------------------------------------------------------------------------------------------------------");
+            System.out.println("------------------------------------------------------------------------------------------------------------------------");
             System.out.println("\n1. Abschluss erstellen");
             System.out.println("2. Noten eintragen (Arbeit/Kolloquium)");
             System.out.println("3. Abschluss bearbeiten");
@@ -423,7 +422,8 @@ public class Main {
 
         String art = null;
         boolean fund = false;
-        System.out.printf("%-20s|%-40s|%-15s|%-10s|%-10s|%-8s%n", "Modulname", "Beschreibung", "Creditpoints", "Note", "Semester", "Versuch");
+        System.out.printf("\n%-20s|%-40s|%-15s|%-10s|%-10s|%-8s%n", "Modulname", "Beschreibung", "Creditpoints", "Note", "Semester", "Versuch");
+        System.out.println("-----------------------------------------------------------------------------------------------------------");
         for (Wahlmodul modul : student.getWahlmodule()) {
             // Überprüfe, ob das aktuelle Modul den gesuchten Modulnamen hat
             if (modul.getModulName().equals(modulname)) {

@@ -241,17 +241,20 @@ public class Student {
 	 * @param
 	 */
 	public double berechnePflichtmodulDurchschnitt() {
+		int count = 0;
 		if (pflichtmodule.isEmpty()) {
 			return 0; // Keine Pflichtmodule vorhanden
 		}
 
 		double sum = 0.0;
 		for (Pflichtmodul pflichtmodul : pflichtmodule) {
-			if(pflichtmodul.getNote()!=0.0 || pflichtmodul.getNote()!= 5.0)
-			sum += pflichtmodul.getNote();
+			if(pflichtmodul.getNote()!=0.0 && pflichtmodul.getNote()!= 5.0) {
+				sum += pflichtmodul.getNote();
+				count++;
+			}
 		}
 
-		return sum / pflichtmodule.size();
+		return sum / count;
 	}
 
 
@@ -260,17 +263,20 @@ public class Student {
 	 * @param
 	 */
 	public double berechneWahlModulDurchschnitt() {
+		int count = 0;
 		if (wahlmodule.isEmpty()) {
 			return 0; // Keine Wahlmodule vorhanden
 		}
 
 		double sum = 0.0;
 		for (Wahlmodul wahlmodul : wahlmodule) {
-			if(wahlmodul.getNote()!=0.0 || wahlmodul.getNote()!= 5.0)
-			sum += wahlmodul.getNote();
+			if(wahlmodul.getNote()!=0.0 && wahlmodul.getNote()!= 5.0) {
+				sum += wahlmodul.getNote();
+				count++;
+			}
 		}
 
-		return sum / wahlmodule.size();
+		return sum / count;
 	}
 
 
