@@ -247,6 +247,7 @@ public class Student {
 
 		double sum = 0.0;
 		for (Pflichtmodul pflichtmodul : pflichtmodule) {
+			if(pflichtmodul.getNote()!=0.0 || pflichtmodul.getNote()!= 5.0)
 			sum += pflichtmodul.getNote();
 		}
 
@@ -265,6 +266,7 @@ public class Student {
 
 		double sum = 0.0;
 		for (Wahlmodul wahlmodul : wahlmodule) {
+			if(wahlmodul.getNote()!=0.0 || wahlmodul.getNote()!= 5.0)
 			sum += wahlmodul.getNote();
 		}
 
@@ -334,17 +336,20 @@ public class Student {
 	}
 
 	/**
-	 * 
 	 * @param pflichtmodul
+	 * @return
 	 */
-	public void addPflichtmodul(Pflichtmodul pflichtmodul) {
+	public boolean addPflichtmodul(Pflichtmodul pflichtmodul) {
 		if (!isModulNameInList(pflichtmodul.getModulName())) {
 			pflichtmodule.add(pflichtmodul);
+			Collections.sort(pflichtmodule, Comparator.comparing(Pflichtmodul::getSemester));
+			return true;
 		} else {
 			System.out.println("Ein Modul mit dem gleichen Namen existiert bereits.");
 			// Hier könntest du weitere Fehlerbehandlung hinzufügen
+			return false;
 		}
-		Collections.sort(pflichtmodule, Comparator.comparing(Pflichtmodul::getSemester));
+
 	}
 
 
@@ -365,17 +370,19 @@ public class Student {
 
 
 	/**
-	 * 
 	 * @param wahlmodul
+	 * @return
 	 */
-	public void addWahlmodul(Wahlmodul wahlmodul) {
+	public boolean addWahlmodul(Wahlmodul wahlmodul) {
 		if (!isModulNameInList(wahlmodul.getModulName())) {
 		wahlmodule.add(wahlmodul);
+		Collections.sort(wahlmodule, Comparator.comparing(Wahlmodul::getSemester));
+		return true;
 		} else {
 		System.out.println("Ein Modul mit dem gleichen Namen existiert bereits.");
+		return false;
 		// Hier könntest du weitere Fehlerbehandlung hinzufügen
 	}
-		Collections.sort(wahlmodule, Comparator.comparing(Wahlmodul::getSemester));
 	}
 
 

@@ -15,10 +15,10 @@ public class Wahlmodul {
 	private int wSemester;
 
 	public Wahlmodul(String modulname, int creditpoints, String beschreibung, int semester) {
-		this.wModulName = modulname;
-		this.wCreditpoints = creditpoints;
-		this.wBeschreibung= beschreibung;
-		this.wSemester = semester;
+		setModulName(modulname);
+		setBeschreibung(beschreibung);
+		setCreditpoints(creditpoints);
+		setSemester(semester);
 	}
 
 
@@ -49,14 +49,14 @@ public class Wahlmodul {
 					}
 					i++;
 				}
-				if (mNote[i] == wNote) {
+				if (mNote[i] == wNote && (s=="n" || s == "l")) {
 					this.wNote = wNote;
 					if(Objects.equals(s, "n")) {
 
 						this.wVersuch = this.wVersuch + 1;
 					}
 					return true;
-				}
+				}else{return false;}
 
 			}
 		}
@@ -130,7 +130,11 @@ public class Wahlmodul {
 	}
 
 	public void setCreditpoints(int creditpoints) {
-		this.wCreditpoints = creditpoints;
+		if (creditpoints <= 30 && creditpoints >= 0) {
+			this.wCreditpoints = creditpoints;
+		}else{
+			System.out.println("Creditpoints sind zu hoch oder zu niedrig");
+		}
 	}
 
 	public void setBeschreibung(String beschreibung) {

@@ -19,10 +19,10 @@ public class Pflichtmodul {
 
 
     public Pflichtmodul(String modulName, int creditpoints, String beschreibung, int semester) {
-		this.pModulName = modulName;
-		this.pCreditpoints = creditpoints;
-		this.pBeschreibung = beschreibung;
-		this.pSemester = semester;
+		setModulName(modulName);
+		setBeschreibung(beschreibung);
+		setCreditpoints(creditpoints);
+		setSemester(semester);
 		//pModul(modulName,creditpoints,beschreibung,semester);
 	}
 
@@ -50,12 +50,14 @@ public class Pflichtmodul {
 					}
 					i++;
 				}
-				if (mNote[i] == pNote) {
+				if (mNote[i] == pNote && (s=="n" || s == "l")) {
 					this.pNote = pNote;
 					if(Objects.equals(s, "n")) {
 						this.pVersuch = this.pVersuch + 1;
 					}
 					return true;
+				}else{
+					return false;
 				}
 
 			}
@@ -134,7 +136,11 @@ public class Pflichtmodul {
 	}
 
 	public void setCreditpoints(int creditpoints) {
-		this.pCreditpoints = creditpoints;
+		if (creditpoints <= 30 && creditpoints >= 0) {
+			this.pCreditpoints = creditpoints;
+		}else{
+			System.out.println("Creditpoints sind zu hoch oder zu niedrig");
+		}
 	}
 
 	public void setBeschreibung(String beschreibung) {

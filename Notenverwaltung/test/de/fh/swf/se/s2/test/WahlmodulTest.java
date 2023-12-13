@@ -9,17 +9,17 @@ import java.io.PrintStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class PflichtmodulTest {
+public class WahlmodulTest {
 
 
     @Test
     public void testAddPNoteInvalidVersuch() {
-        Pflichtmodul testPflichtmodul = new Pflichtmodul("Test",2,"Test",2); // Annahme: Pflichtmodul ist der Name deiner Klasse
+        Wahlmodul testWahlmodul = new Wahlmodul("Test",2,"Test",2); // Annahme: Pflichtmodul ist der Name deiner Klasse
 
         // Testfälle für ungültige Versuche
-        assertFalse(testPflichtmodul.addPNote(1.0, "x"));
-        assertFalse(testPflichtmodul.addPNote(1.3, "x"));
-        assertFalse(testPflichtmodul.addPNote(1.7, "x"));
+        assertFalse(testWahlmodul.addWNote(1.0, "x"));
+        assertFalse(testWahlmodul.addWNote(1.3, "x"));
+        assertFalse(testWahlmodul.addWNote(1.7, "x"));
         // und so weiter...
     }
 
@@ -61,7 +61,7 @@ public class PflichtmodulTest {
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outputStream));
 
-        Pflichtmodul testPflichtmodul = new Pflichtmodul("Test",200,"Test",2);
+        Wahlmodul wm = new Wahlmodul("Test",200,"Test",2);
 
         // Setze die System.out-Ausgabe zurück
         System.setOut(originalOut);
@@ -77,7 +77,7 @@ public class PflichtmodulTest {
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outputStream));
 
-        Pflichtmodul testPflichtmodul = new Pflichtmodul("Test",-2,"Test",2);
+        Wahlmodul wm = new Wahlmodul("Test",-2,"Test",2);
 
         // Setze die System.out-Ausgabe zurück
         System.setOut(originalOut);
@@ -85,5 +85,4 @@ public class PflichtmodulTest {
         // Überprüfe die erwartete Ausgabe
         assertEquals("Creditpoints sind zu hoch oder zu niedrig" + System.lineSeparator(), outputStream.toString());
     }
-
 }
