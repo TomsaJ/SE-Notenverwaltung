@@ -125,6 +125,21 @@ public class Wahlmodul {
 	public int getVersuch() {
 		return wVersuch;
 	}
+	public void setModulName(String modulName) {
+		this.wModulName = modulName;
+	}
+
+	public void setCreditpoints(int creditpoints) {
+		this.wCreditpoints = creditpoints;
+	}
+
+	public void setBeschreibung(String beschreibung) {
+		this.wBeschreibung = beschreibung;
+	}
+
+	public void setSemester(int semester) {
+		this.wSemester = semester;
+	}
 
 
 }

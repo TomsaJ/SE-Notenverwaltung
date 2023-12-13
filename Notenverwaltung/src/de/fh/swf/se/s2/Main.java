@@ -184,7 +184,7 @@ public class Main {
                     clearScreen();
                     while (true){
                     String art = einzelmodul(modulname, student);
-                    System.out.printf("\n%-50s%-15s%n", "1. Noten für "+ modulname +  " eintragen", "2. Verlassen");
+                    System.out.printf("\n%-50s%-50s%-50s%n", "1. Noten für "+ modulname +  " eintragen", "2. Bearbeiten", "3. Verlassen");
                     // Benutzereingabe lesen
                     input = scanner.nextLine();
                     if (input.equals("1")) {
@@ -195,7 +195,36 @@ public class Main {
                         }else if(Objects.equals(art, "Wahl")){
                             student.addNoteToWahlModul(modulname, note);
                         }
-                    }else{break;}}
+                    }else if (input.equals("2")) {
+                            System.out.println("\nBearbeitung von "+ modulname );
+                            if(Objects.equals(art, "Pflicht")){
+                                einzelmodul(modulname,student);
+                                System.out.println("\nBei keiner Änderung, vorherigen Wert eingeben" );
+                                System.out.println("Modulname");
+                                name = scanner.nextLine();
+                                System.out.println("Creditpoints");
+                                credit = Integer.parseInt(scanner.nextLine());
+                                System.out.println("Beschreibung");
+                                beschreibung = scanner.nextLine();
+                                System.out.println("Semester");
+                                semester = Integer.parseInt(scanner.nextLine());
+                                student.changePflichtmodul(modulname,name,credit,beschreibung,semester);
+                                modulname = name;
+                            }else if(Objects.equals(art, "Wahl")){
+                                einzelmodul(modulname,student);
+                                System.out.println("\nBei keiner Änderung, vorherigen Wert eingeben" );
+                                System.out.println("Modulname");
+                                name = scanner.nextLine();
+                                System.out.println("Creditpoints");
+                                credit = Integer.parseInt(scanner.nextLine());
+                                System.out.println("Beschreibung");
+                                beschreibung = scanner.nextLine();
+                                System.out.println("Semester");
+                                semester = Integer.parseInt(scanner.nextLine());
+                                student.changeWahlmodul(modulname,name,credit,beschreibung,semester);
+                                modulname = name;
+                            }
+                        }else{break;}}
                     // Hier können Sie den Code für Option 2 hinzufügen
                     break;
                 case "4":
@@ -257,14 +286,18 @@ public class Main {
             System.out.printf("%-20s|%-40s|%-20s%n", "Thema", "Note Arbeit", "Note Kolloquium");
             System.out.println("-----------------------------------------------------------------------------------------------------------");
             student.getAbschluss().forEach(abschluss -> {
-                System.out.printf("%-20s|%-40s|%-20s%n",
+                System.out.printf("%-20s|%-40s|%-20s|%-20s|%-20s|%-20s%n",
                         abschluss.getThema(),
                         abschluss.getNoteArbeit(),
-                        abschluss.getNoteArbeit());
+                        abschluss.getGewichtungArbeit(),
+                        abschluss.getNoteKolloquium(),
+                abschluss.getGewichtungKolloquium(),
+                abschluss.getVersuch());
             });
             System.out.println("-----------------------------------------------------------------------------------------------------------");
             System.out.println("\n1. Abschluss erstellen");
             System.out.println("2. Noten eintragen (Arbeit/Kolloquium)");
+            System.out.println("3. Abschluss bearbeiten");
             System.out.println("9. Exit");
             System.out.print("Bitte wählen Sie eine Option: ");
             input = scanner.nextLine();
@@ -302,7 +335,7 @@ public class Main {
                                         arbeit = true;
                                     }
                                     if (mNote[i] == noteK) {
-                                     kollo = true;
+                                        kollo = true;
                                     }
                                 }
                                 if(arbeit && kollo)
@@ -323,16 +356,25 @@ public class Main {
 
                             }
                         } else {
-                            System.out.println("Kein Abschluss vorhanden");
+                            System.out.println("Maximale Anzahl der Versuche erreicht");
                         }
+                        break;
                     }
                 case "3":
                     if(student.getAbschluss()!=null)
                     {
-
+                        System.out.println("\nBei keiner Änderung, vorherigen Wert eingeben" );
+                        System.out.println("Thema");
+                        String thema = scanner.nextLine();
+                        System.out.println("Gewichtung Arbeit");
+                        double gewichtungA = Double.parseDouble(scanner.nextLine());
+                        System.out.println("Gewichtung Kolloquium");
+                        double gewichtungK = Double.parseDouble(scanner.nextLine());
+                        student.changeAbschluss(thema, gewichtungA,gewichtungK);
                     }else{
                         System.out.println("Kein Abschluss vorhanden");
                     }
+                    break;
             }
 
         } while (!input.equals("9"));
@@ -408,7 +450,5 @@ public class Main {
         }
     }
 
-    public void abschlussDetails (Student student, String modul){
 
-    }
 }

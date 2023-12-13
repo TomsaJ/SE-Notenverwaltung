@@ -338,26 +338,24 @@ public class Student {
 	 * @param pflichtmodul
 	 */
 	public void addPflichtmodul(Pflichtmodul pflichtmodul) {
-		if (!isModulNameInListP(pflichtmodul.getModulName())) {
+		if (!isModulNameInList(pflichtmodul.getModulName())) {
 			pflichtmodule.add(pflichtmodul);
 		} else {
-			System.out.println("Ein Pflichtmodul mit dem gleichen Namen existiert bereits.");
+			System.out.println("Ein Modul mit dem gleichen Namen existiert bereits.");
 			// Hier könntest du weitere Fehlerbehandlung hinzufügen
 		}
 		Collections.sort(pflichtmodule, Comparator.comparing(Pflichtmodul::getSemester));
 	}
 
-	public boolean isModulNameInListP(String modulName) {
-		for (Pflichtmodul pm : pflichtmodule) {
-			if (pm.getModulName().equals(modulName)) {
+
+	public boolean isModulNameInList(String modulName) {
+		for (Wahlmodul wm : wahlmodule) {
+			if (wm.getModulName().equals(modulName)) {
 				return true; // Pflichtmodul mit dem gegebenen Namen gefunden
 			}
 		}
-		return false; // Pflichtmodul mit dem gegebenen Namen nicht gefunden
-	}
-	public boolean isModulNameInListW(String modulName) {
-		for (Wahlmodul wm : wahlmodule) {
-			if (wm.getModulName().equals(modulName)) {
+		for (Pflichtmodul pm : pflichtmodule) {
+			if (pm.getModulName().equals(modulName)) {
 				return true; // Pflichtmodul mit dem gegebenen Namen gefunden
 			}
 		}
@@ -371,10 +369,10 @@ public class Student {
 	 * @param wahlmodul
 	 */
 	public void addWahlmodul(Wahlmodul wahlmodul) {
-		if (!isModulNameInListW(wahlmodul.getModulName())) {
+		if (!isModulNameInList(wahlmodul.getModulName())) {
 		wahlmodule.add(wahlmodul);
 		} else {
-		System.out.println("Ein Pflichtmodul mit dem gleichen Namen existiert bereits.");
+		System.out.println("Ein Modul mit dem gleichen Namen existiert bereits.");
 		// Hier könntest du weitere Fehlerbehandlung hinzufügen
 	}
 		Collections.sort(wahlmodule, Comparator.comparing(Wahlmodul::getSemester));
@@ -470,6 +468,39 @@ public class Student {
 
 	}
 
+	public void changePflichtmodul(String modulname, String neumodulname,int credit,String beschreibung,int semester) {
+		Pflichtmodul pm = findePflichtmodul(modulname);
+		pm.setModulName(neumodulname);
+		pm.setCreditpoints(credit);
+		pm.setBeschreibung(beschreibung);
+		pm.setSemester(semester);
+		System.out.println("Modul geändert");
+		try {
+			// Warte für 2 Sekunden (2000 Millisekunden)
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// Handle die Interrupted-Exception, falls sie auftritt
+			e.printStackTrace();
+		}
+
+	}
+
+	public void changeWahlmodul(String modulname, String neumodulname,int credit,String beschreibung,int semester) {
+		Wahlmodul wm = findeWahlmodul(modulname);
+		wm.setModulName(neumodulname);
+		wm.setCreditpoints(credit);
+		wm.setBeschreibung(beschreibung);
+		wm.setSemester(semester);
+		System.out.println("Modul geändert");
+		try {
+			// Warte für 2 Sekunden (2000 Millisekunden)
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// Handle die Interrupted-Exception, falls sie auftritt
+			e.printStackTrace();
+		}
+	}
+
 	//public void
 
 	// Getter-Methoden für Matrikelnummer, Vorname, Nachname und Studiengang
@@ -522,4 +553,20 @@ public class Student {
 	}
 
 
+	public void changeAbschluss(String thema, double gewichtungA, double gewichtungK) {
+		Abschluss ab = findeAbschluss();
+		if (ab != null) {
+			ab.setThema(thema);
+			ab.setGewichtungArbeit(gewichtungA);
+			ab.setGewichtungKolloquium(gewichtungK);
+			System.out.println("Abschluss geändert");
+			try {
+				// Warte für 2 Sekunden (2000 Millisekunden)
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// Handle die Interrupted-Exception, falls sie auftritt
+				e.printStackTrace();
+			}
+		}
+	}
 }

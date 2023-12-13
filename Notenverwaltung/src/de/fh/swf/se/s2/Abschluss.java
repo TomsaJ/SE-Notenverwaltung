@@ -124,5 +124,24 @@ public class Abschluss {
 	public int getVersuch() {
 		return aVersuch;
 	}
+	public void setThema(String thema) {
+		this.aThema = thema;
+	}
+
+	public void setNoteArbeit(double noteArbeit) {
+		this.aNoteArbeit = noteArbeit;
+	}
+
+	public void setNoteKolloquium(double noteKolloquium) {
+		this.aNoteKolloquium = noteKolloquium;
+	}
+
+	public void setGewichtungArbeit(double gewichtungArbeit) {
+		this.aGewichtungArbeit = gewichtungArbeit;
+	}
+
+	public void setGewichtungKolloquium(double gewichtungKolloquium) {
+		this.aGewichtungKolloquium = gewichtungKolloquium;
+	}
 
 }

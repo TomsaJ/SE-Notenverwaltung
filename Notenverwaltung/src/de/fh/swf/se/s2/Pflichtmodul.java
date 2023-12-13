@@ -129,4 +129,20 @@ public class Pflichtmodul {
 		return pVersuch;
 	}
 
+	public void setModulName(String modulName) {
+		this.pModulName = modulName;
+	}
+
+	public void setCreditpoints(int creditpoints) {
+		this.pCreditpoints = creditpoints;
+	}
+
+	public void setBeschreibung(String beschreibung) {
+		this.pBeschreibung = beschreibung;
+	}
+
+	public void setSemester(int semester) {
+		this.pSemester = semester;
+	}
+
 }
