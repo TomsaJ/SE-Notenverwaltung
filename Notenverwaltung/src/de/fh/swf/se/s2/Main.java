@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 /**
  * @author TomsaJ
- * @version 1.8.1
+ * @version 1.8.5
  */
 
 public class Main {
@@ -174,6 +174,8 @@ public class Main {
                 case "1":
 
                     do {
+                        clearScreen();
+                        System.out.println("\nPflichtmodul erstellen:");
                         System.out.println("Modulname");
                         name = scanner.nextLine();
                         System.out.println("Creditpoints");
@@ -197,6 +199,7 @@ public class Main {
                     break;
                 case "2":
                     do {
+                        System.out.println("\nWahlmodul erstellen:");
                         System.out.println("Modulname");
                         name = scanner.nextLine();
                         System.out.println("Creditpoints");
@@ -224,6 +227,7 @@ public class Main {
                     modulname = scanner.nextLine();
                     clearScreen();
                     while (true){
+                        clearScreen();
                     String art = einzelmodul(modulname, student);
                     System.out.printf("\n%-50s%-50s%-50s%n", "1. Noten für "+ modulname +  " eintragen", "2. Bearbeiten", "3. Verlassen");
                     // Benutzereingabe lesen
