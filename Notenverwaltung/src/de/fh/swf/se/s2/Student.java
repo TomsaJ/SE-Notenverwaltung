@@ -1,7 +1,12 @@
 package de.fh.swf.se.s2;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class Student {
 
@@ -10,19 +15,136 @@ public class Student {
 	private String vorname;
 	private String nachname;
 	private String studiengang;
+	private int creditpoints;
 	private List<Pflichtmodul> pflichtmodule;
 	private List<Wahlmodul> wahlmodule;
-	private Abschluss abschluss;
+	private List<Abschluss> abschluss;
 
 	// Konstruktor für Student
-	public Student(String vorname, String nachname, long matrikelnummer , String studiengang) {
+	public Student(String vorname, String nachname, long matrikelnummer , String studiengang, int creditpoints) {
 		this.vorname = vorname;
 		this.nachname = nachname;
 		this.matrikelnummer = matrikelnummer;
 		this.studiengang = studiengang;
 		this.pflichtmodule = new ArrayList<>();
 		this.wahlmodule = new ArrayList<>();
+		this.abschluss = new ArrayList<>();
+		this.creditpoints = creditpoints;
+		modul();
+
 	}
+
+	public void modul() {
+		try {
+			var filePath = "Module.csv";
+			var file = Paths.get(filePath);
+
+			if (!Files.exists(file)) {
+				System.out.println("File not found: " + filePath);
+				return;
+			}
+
+			var fileContent = Files.readString(file, Charset.forName("UTF-8"));
+
+			// Trennen Sie die Zeilen der CSV-Datei
+			List<String> lines = Arrays.asList(fileContent.split("\n"));
+
+			// Iterieren Sie durch jede Zeile und verarbeiten Sie die Daten
+			for (String line : lines) {
+				// Trennen Sie die einzelnen Felder durch das Trennzeichen ";"
+				String[] fields = line.split(";");
+
+				// Validieren Sie die Länge des Arrays
+				if (fields.length >= 8) {
+					// Extrahieren Sie die Daten aus den Feldern
+					String student = fields[0];
+					String modul = fields[1];
+					String modulName = fields[2];
+					int creditPoints = Integer.parseInt(fields[3]);
+					String beschreibung = fields[4];
+					int semester = Integer.parseInt(fields[5]);
+					String noteStr = fields[6];
+					int versuch = Integer.parseInt(fields[7]);
+
+
+					// Rufen Sie Ihre Methode auf, um die Daten zu verarbeiten
+					if(Objects.equals(student, nachname)) {
+						if(Objects.equals(modul, "p")) {
+							Pflichtmodul pm = new Pflichtmodul(modulName, creditPoints, beschreibung, semester);
+							addPflichtmodul(pm);
+							if (!noteStr.isEmpty() && !noteStr.equals("0.0")) {
+								double note = Double.parseDouble(noteStr);
+								pm.addPNote(note,"l");
+								pm.addPVersuch(versuch);
+							}
+						}else if(Objects.equals(modul, "w")){
+							Wahlmodul wm = new Wahlmodul(modulName, creditPoints, beschreibung, semester);
+							addWahlmodul(wm);
+							if (!noteStr.isEmpty() && !noteStr.equals("0.0")) {
+								double note = Double.parseDouble(noteStr);
+								wm.addWNote(note,"l");
+								wm.addWVersuch(versuch);
+							}
+						}
+					}
+					Collections.sort(wahlmodule, Comparator.comparing(Wahlmodul::getSemester));
+					Collections.sort(pflichtmodule, Comparator.comparing(Pflichtmodul::getSemester));
+				} else {
+					System.out.println("Warning: Insufficient fields in line");
+				}
+			}
+
+		} catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+		try{
+			int i = 0;
+			var filePath = "Abschluss.csv";
+			var file = Paths.get(filePath);
+
+			if (!Files.exists(file)) {
+				System.out.println("File not found: " + filePath);
+				return;
+			}
+
+			var fileContent = Files.readString(file, Charset.forName("UTF-8"));
+
+			// Trennen Sie die Zeilen der CSV-Datei
+			List<String> lines = Arrays.asList(fileContent.split("\n"));
+
+			// Iterieren Sie durch jede Zeile und verarbeiten Sie die Daten
+			for (String line : lines) {
+				// Trennen Sie die einzelnen Felder durch das Trennzeichen ";"
+				String[] fields = line.split(";");
+
+				// Validieren Sie die Länge des Arrays
+				if (fields.length >= 5) {
+					// Extrahieren Sie die Daten aus den Feldern
+					String student = fields[0];
+					String thema = fields[1];
+					double gArbeit = Double.parseDouble(fields[2]);
+					double nArbeit = Double.parseDouble(fields[3]);
+					double gKollo = Double.parseDouble(fields[4]);
+					double nKollo = Double.parseDouble(fields[5]);
+					int versuch = Integer.parseInt(fields[6]);
+
+
+					// Rufen Sie Ihre Methode auf, um die Daten zu verarbeiten
+					if (Objects.equals(student, nachname) && i == 0) {
+							Abschluss abschluss = new Abschluss(thema, gArbeit, gKollo);
+							addAbschluss(abschluss);
+							abschluss.addAVersuch(versuch);
+							abschluss.addNoteArbeit(nArbeit,"l");
+							abschluss.addNoteKolloquium(nKollo,"l");
+							i = 1;
+						}
+					}
+				}
+
+		}catch (IOException e){
+						throw new RuntimeException(e);
+		}
+    }
 
 	/**
 	 * 
@@ -51,9 +173,28 @@ public class Student {
 	 * @param pflichtmodul
 	 * @param pNote
 	 */
-	public void addNoteToPflichmodul(Pflichtmodul pflichtmodul, double pNote) {
-		// TODO - implement Student.addNoteToPflichmodul
-		throw new UnsupportedOperationException();
+	public  void addNoteToPflichmodul(String pflichtmodul, double pNote) {
+		Pflichtmodul pm1 = findePflichtmodul(pflichtmodul);
+
+
+		if (pm1 != null) {
+			pm1.addPNote(pNote,"n");
+			int pmCP = pm1.getCreditpoints();
+			creditpoints = creditpoints + pmCP;
+		} else {
+			System.out.println("Pflichtmodul nicht gefunden!");
+			// Hier könntest du weitere Fehlerbehandlung hinzufügen
+		}
+	}
+
+	// Annahme: Hier ist eine Methode zum Finden eines Pflichtmoduls anhand des Namens
+	private  Pflichtmodul findePflichtmodul(String pflichtmodulName) {
+		for (Pflichtmodul pm : pflichtmodule) {
+			if (pm.getModulName().equals(pflichtmodulName)) {
+				return pm;
+			}
+		}
+		return null; // Pflichtmodul nicht gefunden
 	}
 
 	/**
@@ -74,8 +215,25 @@ public class Student {
 	 * @param wNote
 	 */
 	public void addNoteToWahlModul(String wModulName, double wNote) {
-		// TODO - implement Student.addNoteToWahlModul
-		System.out.println("Note " + wNote + " zum Wahlmodul " + wModulName + " hinzugefügt.");
+		Wahlmodul wm = findeWahlmodul(wModulName);
+
+		if (wm != null) {
+			wm.addWNote(wNote,"n");
+			int wmCP = wm.getCreditpoints();
+			creditpoints = creditpoints + wmCP;
+		} else {
+			System.out.println("Pflichtmodul nicht gefunden!");
+			// Hier könntest du weitere Fehlerbehandlung hinzufügen
+		}
+	}
+
+	private  Wahlmodul findeWahlmodul(String wahlmodulName) {
+		for (Wahlmodul wm : wahlmodule) {
+			if (wm.getModulName().equals(wahlmodulName)) {
+				return wm;
+			}
+		}
+		return null; // Pflichtmodul nicht gefunden
 	}
 
 	/**
@@ -83,16 +241,20 @@ public class Student {
 	 * @param
 	 */
 	public double berechnePflichtmodulDurchschnitt() {
+		int count = 0;
 		if (pflichtmodule.isEmpty()) {
 			return 0; // Keine Pflichtmodule vorhanden
 		}
 
 		double sum = 0.0;
 		for (Pflichtmodul pflichtmodul : pflichtmodule) {
-			sum += pflichtmodul.getPNote();
+			if(pflichtmodul.getNote()!=0.0 && pflichtmodul.getNote()!= 5.0) {
+				sum += pflichtmodul.getNote();
+				count++;
+			}
 		}
 
-		return sum / pflichtmodule.size();
+		return sum / count;
 	}
 
 
@@ -101,16 +263,20 @@ public class Student {
 	 * @param
 	 */
 	public double berechneWahlModulDurchschnitt() {
+		int count = 0;
 		if (wahlmodule.isEmpty()) {
 			return 0; // Keine Wahlmodule vorhanden
 		}
 
 		double sum = 0.0;
 		for (Wahlmodul wahlmodul : wahlmodule) {
-			sum += wahlmodul.getNote();
+			if(wahlmodul.getNote()!=0.0 && wahlmodul.getNote()!= 5.0) {
+				sum += wahlmodul.getNote();
+				count++;
+			}
 		}
 
-		return sum / wahlmodule.size();
+		return sum / count;
 	}
 
 
@@ -176,20 +342,58 @@ public class Student {
 	}
 
 	/**
-	 * 
 	 * @param pflichtmodul
+	 * @return
 	 */
-	public void addPflichtmodul(Pflichtmodul pflichtmodul) {
-		pflichtmodule.add(pflichtmodul);
+	public boolean addPflichtmodul(Pflichtmodul pflichtmodul) {
+		if (!isModulNameInList(pflichtmodul.getModulName())) {
+			if (pflichtmodul.getCreditpoints()>= 0.0 && pflichtmodul.getCreditpoints() <=30) {
+				pflichtmodule.add(pflichtmodul);
+				Collections.sort(pflichtmodule, Comparator.comparing(Pflichtmodul::getSemester));
+				return true;
+			}else{
+			return false;
+			}
+		} else {
+			System.out.println("Ein Modul mit dem gleichen Namen existiert bereits.");
+			// Hier könntest du weitere Fehlerbehandlung hinzufügen
+			return false;
+		}
+
 	}
 
 
+	public boolean isModulNameInList(String modulName) {
+		for (Wahlmodul wm : wahlmodule) {
+			if (wm.getModulName().equals(modulName)) {
+				return true; // Pflichtmodul mit dem gegebenen Namen gefunden
+			}
+		}
+		for (Pflichtmodul pm : pflichtmodule) {
+			if (pm.getModulName().equals(modulName)) {
+				return true; // Pflichtmodul mit dem gegebenen Namen gefunden
+			}
+		}
+		return false; // Pflichtmodul mit dem gegebenen Namen nicht gefunden
+	}
+
+
+
 	/**
-	 * 
 	 * @param wahlmodul
+	 * @return
 	 */
-	public void addWahlmodul(Wahlmodul wahlmodul) {
-		wahlmodule.add(wahlmodul);
+	public boolean addWahlmodul(Wahlmodul wahlmodul) {
+		if (!isModulNameInList(wahlmodul.getModulName())) {
+			if (wahlmodul.getCreditpoints()>= 0.0 && wahlmodul.getCreditpoints() <=30) {
+			wahlmodule.add(wahlmodul);
+			Collections.sort(wahlmodule, Comparator.comparing(Wahlmodul::getSemester));
+			return true;}else{return false;}
+		} else {
+		System.out.println("Ein Modul mit dem gleichen Namen existiert bereits.");
+		return false;
+		// Hier könntest du weitere Fehlerbehandlung hinzufügen
+	}
 	}
 
 
@@ -202,25 +406,120 @@ public class Student {
 		throw new UnsupportedOperationException();
 	}
 
+	public void save (){
+		try {
+			//first method
+			var writer = new PrintWriter(
+					"Module.csv", StandardCharsets.UTF_8);
+			getPflichtmodule().forEach(modul -> {
+				writer.println(nachname + ";" + "p;" +   modul.getModulName() + ";" + modul.getCreditpoints()+ ";" + modul.getBeschreibung()  + ";" + modul.getSemester()+";" + modul.getNote() + ";" + modul.getVersuch()+";");
+			});
+			getWahlmodule().forEach(modul -> {
+				writer.println(nachname + ";" + "w;" +   modul.getModulName() + ";" + modul.getCreditpoints()+ ";" + modul.getBeschreibung()  + ";" + modul.getSemester()+";" + modul.getNote() + ";" + modul.getVersuch()+";");
+			});
+
+			writer.close();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+			try {
+			var writerA = new PrintWriter(
+					"Abschluss.csv", StandardCharsets.UTF_8);
+				getAbschluss().forEach(modul -> {
+			writerA.println(nachname + ";"  +   modul.getThema() + ";" + modul.getGewichtungArbeit()+ ";" + modul.getNoteArbeit()  + ";" + modul.getGewichtungKolloquium()+";" + modul.getNoteKolloquium() + ";" + modul.getVersuch()+";");
+			});
+			writerA.close();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		try {
+			//first method
+			var writer = new PrintWriter(
+					"Student.csv", StandardCharsets.UTF_8);
+				writer.println(getVorname()+";"+getNachname()+";"+getMatrikelnummer()+";"+getStudiengang()+";"+getCreditpoints());
+			writer.close();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+	}
+
 	/**
 	 * 
-	 * @param abschluss
+	 * @param abschluss1
 	 */
-	public void addAbschluss(Abschluss abschluss) {
-		this.abschluss = abschluss;
+	public void addAbschluss(Abschluss abschluss1) {
+		if (abschluss1 != null) {
+			abschluss.add(abschluss1);
+		}
 	}
 
 	public void setAbschluss(Abschluss abschluss) {
-		this.abschluss = abschluss;
+
 	}
 
 	public void addNoteToAbschlussA(double noteArbeit) {
-		abschluss.addNoteArbeit(noteArbeit);
+		Abschluss ab = findeAbschluss();
+		if (ab != null) {
+			ab.addNoteArbeit(noteArbeit, "n");
+		}
+
+	}
+
+	private  Abschluss findeAbschluss() {
+		for (Abschluss abschluss : abschluss) {
+			return abschluss;
+		}
+		return null;
 	}
 
 	public void addNoteToAbschlussK(double noteKolloquium) {
-		abschluss.addNoteKolloquium(noteKolloquium);
+		Abschluss ab = findeAbschluss();
+		if (ab != null) {
+			ab.addNoteKolloquium(noteKolloquium,"n");
+			double noteA = ab.getNoteArbeit();
+			double noteK = ab.getNoteKolloquium();
+			if (noteA > 0.0 && noteA < 5.0 && noteK > 0.0 && noteK < 5.0)
+			{
+				creditpoints = 180;
+			}
+		}
+
 	}
+
+	public void changePflichtmodul(String modulname, String neumodulname,int credit,String beschreibung,int semester) {
+		Pflichtmodul pm = findePflichtmodul(modulname);
+		pm.setModulName(neumodulname);
+		pm.setCreditpoints(credit);
+		pm.setBeschreibung(beschreibung);
+		pm.setSemester(semester);
+		System.out.println("Modul geändert");
+		try {
+			// Warte für 2 Sekunden (2000 Millisekunden)
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// Handle die Interrupted-Exception, falls sie auftritt
+			e.printStackTrace();
+		}
+
+	}
+
+	public void changeWahlmodul(String modulname, String neumodulname,int credit,String beschreibung,int semester) {
+		Wahlmodul wm = findeWahlmodul(modulname);
+		wm.setModulName(neumodulname);
+		wm.setCreditpoints(credit);
+		wm.setBeschreibung(beschreibung);
+		wm.setSemester(semester);
+		System.out.println("Modul geändert");
+		try {
+			// Warte für 2 Sekunden (2000 Millisekunden)
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// Handle die Interrupted-Exception, falls sie auftritt
+			e.printStackTrace();
+		}
+	}
+
+	//public void
 
 	// Getter-Methoden für Matrikelnummer, Vorname, Nachname und Studiengang
 	public long getMatrikelnummer() {
@@ -238,6 +537,9 @@ public class Student {
 	public String getStudiengang() {
 		return studiengang;
 	}
+	public int getCreditpoints() {
+		return creditpoints;
+	}
 
 	// Getter-Methoden für Pflicht- und Wahlmodule sowie Abschluss
 	public List<Pflichtmodul> getPflichtmodule() {
@@ -248,9 +550,41 @@ public class Student {
 		return wahlmodule;
 	}
 
-	public Abschluss getAbschluss() {
+	public List<Abschluss> getAbschluss() {
 		return abschluss;
 	}
 
+	public int getVersuchA()
+	{
+		Abschluss ab = findeAbschluss();
+		return ab.getVersuch();
+	}
 
+	public double getNoteA(){
+		Abschluss ab = findeAbschluss();
+		return ab.getNoteArbeit();
+	}
+
+	public double getNoteK(){
+		Abschluss ab = findeAbschluss();
+		return ab.getNoteKolloquium();
+	}
+
+
+	public void changeAbschluss(String thema, double gewichtungA, double gewichtungK) {
+		Abschluss ab = findeAbschluss();
+		if (ab != null) {
+			ab.setThema(thema);
+			ab.setGewichtungArbeit(gewichtungA);
+			ab.setGewichtungKolloquium(gewichtungK);
+			System.out.println("Abschluss geändert");
+			try {
+				// Warte für 2 Sekunden (2000 Millisekunden)
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// Handle die Interrupted-Exception, falls sie auftritt
+				e.printStackTrace();
+			}
+		}
+	}
 }
