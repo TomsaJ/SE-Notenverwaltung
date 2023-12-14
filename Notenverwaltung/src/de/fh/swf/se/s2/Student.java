@@ -36,7 +36,7 @@ public class Student {
 
 	public void modul() {
 		try {
-			var filePath = "/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Module.csv";
+			var filePath = "Module.csv";
 			var file = Paths.get(filePath);
 
 			if (!Files.exists(file)) {
@@ -99,7 +99,7 @@ public class Student {
         }
 		try{
 			int i = 0;
-			var filePath = "/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Abschluss.csv";
+			var filePath = "Abschluss.csv";
 			var file = Paths.get(filePath);
 
 			if (!Files.exists(file)) {
@@ -410,7 +410,7 @@ public class Student {
 		try {
 			//first method
 			var writer = new PrintWriter(
-					"/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Module.csv", StandardCharsets.UTF_8);
+					"Module.csv", StandardCharsets.UTF_8);
 			getPflichtmodule().forEach(modul -> {
 				writer.println(nachname + ";" + "p;" +   modul.getModulName() + ";" + modul.getCreditpoints()+ ";" + modul.getBeschreibung()  + ";" + modul.getSemester()+";" + modul.getNote() + ";" + modul.getVersuch()+";");
 			});
@@ -424,7 +424,7 @@ public class Student {
 		}
 			try {
 			var writerA = new PrintWriter(
-					"/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Abschluss.csv", StandardCharsets.UTF_8);
+					"Abschluss.csv", StandardCharsets.UTF_8);
 				getAbschluss().forEach(modul -> {
 			writerA.println(nachname + ";"  +   modul.getThema() + ";" + modul.getGewichtungArbeit()+ ";" + modul.getNoteArbeit()  + ";" + modul.getGewichtungKolloquium()+";" + modul.getNoteKolloquium() + ";" + modul.getVersuch()+";");
 			});
@@ -435,7 +435,7 @@ public class Student {
 		try {
 			//first method
 			var writer = new PrintWriter(
-					"/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Student.csv", StandardCharsets.UTF_8);
+					"Student.csv", StandardCharsets.UTF_8);
 				writer.println(getVorname()+";"+getNachname()+";"+getMatrikelnummer()+";"+getStudiengang()+";"+getCreditpoints());
 			writer.close();
 		} catch (IOException e) {

@@ -23,7 +23,7 @@ public class Main {
 
         String lnachname = scanner.nextLine();
         try {
-            var filePath = "/Users/juliantomsa/Library/CloudStorage/SynologyDrive-Uni/Software-Engineering/Programm (Blatt3)/Notenverwaltung/src/Student.csv";
+            var filePath = "Student.csv";
             var file = Paths.get(filePath);
 
             if (!Files.exists(file)) {
