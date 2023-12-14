@@ -140,6 +140,13 @@ public class Pflichtmodul {
 			this.pCreditpoints = creditpoints;
 		}else{
 			System.out.println("Creditpoints sind zu hoch oder zu niedrig");
+			try {
+				// Warte für 2 Sekunden (2000 Millisekunden)
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// Handle die Interrupted-Exception, falls sie auftritt
+				e.printStackTrace();
+			}
 		}
 	}
 
