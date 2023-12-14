@@ -347,9 +347,13 @@ public class Student {
 	 */
 	public boolean addPflichtmodul(Pflichtmodul pflichtmodul) {
 		if (!isModulNameInList(pflichtmodul.getModulName())) {
-			pflichtmodule.add(pflichtmodul);
-			Collections.sort(pflichtmodule, Comparator.comparing(Pflichtmodul::getSemester));
-			return true;
+			if (pflichtmodul.getCreditpoints()>= 0.0 && pflichtmodul.getCreditpoints() <=30) {
+				pflichtmodule.add(pflichtmodul);
+				Collections.sort(pflichtmodule, Comparator.comparing(Pflichtmodul::getSemester));
+				return true;
+			}else{
+			return false;
+			}
 		} else {
 			System.out.println("Ein Modul mit dem gleichen Namen existiert bereits.");
 			// Hier könntest du weitere Fehlerbehandlung hinzufügen
@@ -381,9 +385,10 @@ public class Student {
 	 */
 	public boolean addWahlmodul(Wahlmodul wahlmodul) {
 		if (!isModulNameInList(wahlmodul.getModulName())) {
-		wahlmodule.add(wahlmodul);
-		Collections.sort(wahlmodule, Comparator.comparing(Wahlmodul::getSemester));
-		return true;
+			if (wahlmodul.getCreditpoints()>= 0.0 && wahlmodul.getCreditpoints() <=30) {
+			wahlmodule.add(wahlmodul);
+			Collections.sort(wahlmodule, Comparator.comparing(Wahlmodul::getSemester));
+			return true;}else{return false;}
 		} else {
 		System.out.println("Ein Modul mit dem gleichen Namen existiert bereits.");
 		return false;
